@@ -58,7 +58,7 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "io.github.amjdalhashede"
+                groupId = "com.github.ringtonesmartkit"
                 artifactId = "ringtone-smart-kit"
                 version = "1.0.2"
                 from(components["release"])
