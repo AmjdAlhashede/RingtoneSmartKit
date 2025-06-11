@@ -2,10 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     `maven-publish`
+    signing
 }
 
 android {
-    namespace = "com.github.ringtonesmartkit"
+    namespace = "io.github.amjdalhashede"
     compileSdk = 36
 
     defaultConfig {
@@ -58,11 +59,59 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                groupId = "com.github.ringtonesmartkit"
+                from(components["release"])
+                groupId = "io.github.amjdalhashede"
                 artifactId = "ringtone-smart-kit"
                 version = "1.0.2"
-                from(components["release"])
+
+                pom {
+                    name.set("Ringtone Smart Kit")
+                    description.set("Android library to set ringtones from various sources.")
+                    url.set("https://github.com/Amjdalhashede/RingtoneSmartKitProject")
+
+                    licenses {
+                        license {
+                            name.set("The Apache License, Version 2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("Amjdalhashede")
+                            name.set("Amjd Alhashede")
+                            url.set("https://github.com/Amjdalhashede")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:git://github.com/Amjdalhashede/RingtoneSmartKitProject.git")
+                        developerConnection.set("scm:git:ssh://git@github.com/Amjdalhashede/RingtoneSmartKitProject.git")
+                        url.set("https://github.com/Amjdalhashede/RingtoneSmartKitProject")
+                    }
+                }
             }
         }
+
+        repositories {
+            maven {
+                name = "Sonatype"
+                url = uri(
+                    if (version.toString().endsWith("SNAPSHOT"))
+                        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                    else
+                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                )
+                credentials {
+                    username = findProperty("ossrhUsername") as String? ?: System.getenv("OSSRH_USERNAME")
+                    password = findProperty("ossrhPassword") as String? ?: System.getenv("OSSRH_PASSWORD")
+                }
+            }
+        }
+    }
+
+    signing {
+        useGpgCmd()
+        sign(publishing.publications["release"])
     }
 }

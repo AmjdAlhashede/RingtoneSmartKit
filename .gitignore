@@ -20,4 +20,4 @@ local.properties
 /.idea/assetWizardSettings.xml
 
 # ========== Signing & Secrets ==========
-gradle.properties
+#gradle.properties

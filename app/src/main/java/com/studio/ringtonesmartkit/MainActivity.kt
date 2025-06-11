@@ -16,9 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.ringtonesmartkit.api.RingtoneHelper
-import com.github.ringtonesmartkit.domain.model.ContactIdentifier
-import com.github.ringtonesmartkit.domain.model.RingtoneSource
+import io.github.ringtonesmartkit.api.RingtoneHelper
+import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import com.studio.ringtonesmartkit.ui.theme.RingtoneSmartKitTheme
 
 class MainActivity : ComponentActivity() {
