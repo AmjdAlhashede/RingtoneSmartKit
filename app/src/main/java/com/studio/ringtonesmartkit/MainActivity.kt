@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
             RingtoneSmartKitTheme {
                 fun tryApplyRingtone() {
                     RingtoneHelper.setSystemRingtone(
-                        source = RingtoneSource.FromAssets(filePath = "me/Best Ringtone.mp3"),
+                        source = RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3"),
                         onSuccess = {
                             runOnUiThread {
                                 Toast.makeText(
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
                 fun tryApplyContactRingtone() {
                     RingtoneHelper.setContactRingtone(
-                        source = RingtoneSource.FromAssets(filePath = "me/Gitar .mp3"),
+                        source = RingtoneSource.FromAssets(filePath = "ringtones/Gitar .mp3"),
                         contact = ContactIdentifier.Interactive,
                         onSuccess = {
                             runOnUiThread {
