@@ -1,40 +1,34 @@
 # RingtoneSmartKit
 
-A Kotlin library for easy ringtone management on Android, supporting multiple ringtone sources and providing a simplified API that does not require passing Context or Activity.
-
-
+A Kotlin library for easy ringtone management on Android, supporting multiple ringtone sources and
+providing a simplified API that does not require passing Context or Activity.
 
 ## Features
 
-- Simplified API for setting system and contact ringtones without needing to pass Context or Activity.
+- Simplified API for setting system and contact ringtones without needing to pass Context or
+  Activity.
 - Supports multiple ringtone sources, including assets, local storage (URI), and remote URLs.
-- Easy assignment of ringtones to specific contacts via different contact identifiers (ID, URI, phone number).
+- Easy assignment of ringtones to specific contacts via different contact identifiers (ID, URI,
+  phone number).
 - Asynchronous operations with success and error callbacks for better control.
 - Supports setting different types of system ringtones: call, notification, and alarm.
 - Fully written in Kotlin with idiomatic usage and extension-friendly design.
-
 
 ## Installation
 
 Add the following dependency to your `build.gradle` or `build.gradle.kts` file:
 
-<details>
-<summary>Gradle Groovy (build.gradle)</summary>
+### Gradle Groovy (build.gradle)
 
 ```groovy
 implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha"
 ```
 
-</details>
-
-<details>
-<summary>Gradle Kotlin DSL (build.gradle.kts)</summary>
+### Gradle Kotlin DSL (build.gradle.kts)
 
 ```kotlin
 implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha")
 ```
-
-</details>
 
 ## Usage
 
@@ -96,7 +90,6 @@ RingtoneHelper.setContactRingtone(
 )
 ```
 
-
 ![Example of ringtone from assets](docs/assets/ringtone_assets_structure_simple.png)
 
 ### Applying ringtone from local storage (Coming soon)
@@ -108,7 +101,6 @@ val source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audi
 // Usage will be similar to other methods
 ```
 
-
 ## Contributing
 
 Contributions are welcome and appreciated!  
@@ -118,7 +110,8 @@ If you find a bug, have a feature request, or want to improve the code/documenta
 - Create a pull request
 - Suggest enhancements
 
-Please make sure your changes follow the current code style and include proper documentation or tests when applicable.
+Please make sure your changes follow the current code style and include proper documentation or
+tests when applicable.
 
 ---
 
@@ -130,17 +123,17 @@ If you have suggestions, questions, or feedback, feel free to reach out:
 - Contact me directly via [GitHub Profile](https://github.com/AmjdAlhashede)
 - Or send an email to: **amjdalhashede@gmail.com**
 
-
 ## Availability
 
 This library is available via:
 
-📦 [Maven Central](https://central.sonatype.com/artifact/io.github.amjdalhashede/ringtone-smart-kit): Easy integration using Gradle/Maven.  
-🐙 [GitHub Packages](https://github.com/AmjdAlhashede/RingtoneSmartKitProject/packages): Published to the GitHub repository packages as an alternative.
+📦 [Maven Central](https://central.sonatype.com/artifact/io.github.amjdalhashede/ringtone-smart-kit):
+Easy integration using Gradle/Maven.  
+🐙 [GitHub Packages](https://github.com/AmjdAlhashede/RingtoneSmartKitProject/packages): Published to
+the GitHub repository packages as an alternative.
+
 - 💻 **GitHub Repository**: Source code, examples, and documentation are available here:
   [https://github.com/AmjdAlhashede/RingtoneSmartKitProject](https://github.com/AmjdAlhashede/RingtoneSmartKitProject)
-
-
 
 ## License
 
