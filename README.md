@@ -30,9 +30,10 @@ implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha"
 implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha")
 ```
 
+
 ## Usage
 
-### Setting a system ringtone
+### 1. Setting a system ringtone
 
 ```kotlin
 RingtoneHelper.setSystemRingtone(
@@ -42,29 +43,33 @@ RingtoneHelper.setSystemRingtone(
         println("System ringtone set successfully")
     },
     onError = { error ->
-        println("Failed to set system ringtone: \${error.message}")
+        println("Failed to set system ringtone: ${error.message}")
     }
 )
 ```
 
-### Setting a ringtone for a specific contact
+---
+
+### 2. Setting a ringtone for a specific contact
 
 ```kotlin
 val contact = ContactIdentifier.ByPhone("+1234567890")
 
 RingtoneHelper.setContactRingtone(
-    source = RingtoneSource.FromUrl("https://example.com/ringtone.mp3"),
+    source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3"),
     contact = contact,
     onSuccess = {
         println("Contact ringtone set successfully")
     },
     onError = { error ->
-        println("Failed to set contact ringtone: \${error.message}")
+        println("Failed to set contact ringtone: ${error.message}")
     }
 )
 ```
 
-### Applying ringtone to any target
+---
+
+### 3. Applying ringtone to any target
 
 ```kotlin
 val target = RingtoneTarget.Contact(ContactIdentifier.ById(42))
@@ -73,11 +78,25 @@ RingtoneHelper.applyToTarget(
     source = RingtoneSource.FromAssets("another_ringtone.mp3"),
     target = target,
     onSuccess = { println("Ringtone applied successfully") },
-    onError = { error -> println("Error applying ringtone: \${error.message}") }
+    onError = { error -> println("Error applying ringtone: ${error.message}") }
 )
 ```
 
-### Setting ringtone via interactive contact picker
+---
+
+### 4. Applying ringtone from local storage
+
+This feature allows you to set ringtones from local storage URIs.
+
+```kotlin
+val source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audio/media/10"))
+
+// Usage is similar to other methods
+```
+
+---
+
+### 5. Setting ringtone via interactive contact picker
 
 You can allow users to select a contact interactively without passing ID or phone manually:
 
@@ -90,16 +109,30 @@ RingtoneHelper.setContactRingtone(
 )
 ```
 
-![Example of ringtone from assets](docs/assets/ringtone_assets_structure_simple.png)
+---
 
-### Applying ringtone from local storage (Coming soon)
-
-This feature will allow you to set ringtones from local storage URIs.
+## Sources available for ringtones
 
 ```kotlin
-val source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audio/media/10"))
-// Usage will be similar to other methods
+sealed class RingtoneSource {
+    data class FromAssets(val filePath: String, val outputDirPath: String = "") : RingtoneSource()
+    data class FromStorage(val uri: Uri) : RingtoneSource()
+    // Note: FromUrl will be available in the future
+    // data class FromUrl(val url: String) : RingtoneSource()
+}
 ```
+
+---
+
+## Future feature: Setting ringtone from URL
+
+The `FromUrl` source will be supported in a future release:
+
+```kotlin
+// This will be available soon
+// RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
+```
+
 
 ## Contributing
 
