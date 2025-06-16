@@ -13,6 +13,8 @@ material = "1.12.0"
 koin-version = "4.0.4"
 lifecycleViewmodelKtx = "2.9.1"
 vanniktechPluginVersion = "0.30.0"
+dagger2Version="2.56.2"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -39,6 +41,12 @@ koin-android = { module = "io.insert-koin:koin-android" }
 
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
+
+#dagger2
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger2Version" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger2Version" }
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -51,4 +59,8 @@ vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanni
 koin = [
     "koin-core",
     "koin-android"
+]
+
+dagger-bundle=[
+    "dagger"
 ]

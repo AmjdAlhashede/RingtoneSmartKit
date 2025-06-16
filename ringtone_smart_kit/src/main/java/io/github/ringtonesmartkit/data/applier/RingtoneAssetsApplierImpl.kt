@@ -6,7 +6,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.ContactsContract
 import android.provider.MediaStore
-import io.github.ringtonesmartkit.viewmodules.ContactPickerViewModel
 import io.github.ringtonesmartkit.domain.applier.RingtoneAssetsApplier
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
@@ -15,10 +14,12 @@ import io.github.ringtonesmartkit.extensions.ExternalAudioUri
 import io.github.ringtonesmartkit.extensions.finalizePending
 import io.github.ringtonesmartkit.extensions.getContactUriFromIdentifier
 import io.github.ringtonesmartkit.extensions.getMimeType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class RingtoneAssetsApplierImpl(
+@Singleton
+internal class RingtoneAssetsApplierImpl @Inject constructor(
     private val context: Context,
-    private val myViewModel: ContactPickerViewModel,
 ) : RingtoneAssetsApplier {
 
     @Throws(IllegalArgumentException::class)
@@ -64,7 +65,7 @@ internal class RingtoneAssetsApplierImpl(
         ) {
             is RingtoneTarget.ContactTarget.Provided -> {
                 val contactUri =
-                    getContactUriFromIdentifier(myViewModel = myViewModel, target.identifier)
+                    getContactUriFromIdentifier(target.identifier)
                         ?: throw IllegalArgumentException("Invalid contact identifier")
                 val ringtoneValue = ContentValues().apply {
                     put(ContactsContract.Contacts.CUSTOM_RINGTONE, insertedUri.toString())

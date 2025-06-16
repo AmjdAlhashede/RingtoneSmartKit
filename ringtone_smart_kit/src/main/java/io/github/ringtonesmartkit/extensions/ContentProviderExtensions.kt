@@ -5,8 +5,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import io.github.ringtonesmartkit.contract.pickContact
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
-import io.github.ringtonesmartkit.viewmodules.ContactPickerViewModel
 
 
 internal fun Context.getMimeType(uri: Uri): String? {
@@ -21,7 +21,6 @@ internal fun ContentValues.finalizePending(context: Context, uri: Uri) {
 }
 
 internal suspend fun getContactUriFromIdentifier(
-    myViewModel: ContactPickerViewModel,
     identifier: ContactIdentifier,
 ): Uri? {
     return when (identifier) {
@@ -35,7 +34,7 @@ internal suspend fun getContactUriFromIdentifier(
         }
 
         ContactIdentifier.Interactive -> {
-            val result = myViewModel.pickContact()
+            val result = pickContact()
             printString(result)
             result
         }

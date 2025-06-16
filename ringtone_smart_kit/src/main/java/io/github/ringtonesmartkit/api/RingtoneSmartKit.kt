@@ -6,9 +6,12 @@ import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.usecase.ApplyContactRingtoneUseCase
 import io.github.ringtonesmartkit.domain.usecase.ApplyRingtoneUseCase
 import io.github.ringtonesmartkit.domain.usecase.LoadRingtoneUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-internal class RingtoneSmartKit(
+@Singleton
+internal class RingtoneSmartKit @Inject constructor(
     private val loadRingtone: LoadRingtoneUseCase,
     private val applyRingtone: ApplyRingtoneUseCase,
     private val applyContactRingtoneUseCase: ApplyContactRingtoneUseCase,

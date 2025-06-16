@@ -1,37 +1,27 @@
 package io.github.ringtonesmartkit.api
 
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.ViewModelProvider
-import io.github.ringtonesmartkit.contract.ActivityTracker
+import io.github.provider.RingtoneSmartKitInitProvider
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
-import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.model.RingtoneType
-import io.github.ringtonesmartkit.viewmodules.ContactViewModel
 
+/**
+ * Helper object that provides a simplified API for setting system and contact ringtones.
+ *
+ * Uses the underlying RingtoneManager implementation from the DI provider.
+ */
 object RingtoneHelper {
 
-    private val viewModel: ContactViewModel
-        get() = ViewModelProvider(
-            ActivityTracker.currentActivity as ComponentActivity
-        )[ContactViewModel::class.java]
-
+    private val ringtoneManager = RingtoneSmartKitInitProvider.component.provideRingtoneManager()
 
     /**
-     * تحميل نغمة من مصدر بدون تطبيقها.
-     */
-    fun loadRingtone(
-        source: RingtoneSource,
-        onLoaded: (RingtoneData?) -> Unit,
-        onError: (Throwable) -> Unit = {},
-    ) {
-        viewModel.loadRingtone(source, onLoaded, onError)
-    }
-
-
-    /**
-     * تحميل وتطبيق نغمة على نوع نظام معين (CALL / NOTIFICATION / ALARM)
+     * Sets the device's system ringtone from a given source.
+     *
+     * @param source The source of the ringtone (e.g., local file, URL, or resource).
+     * @param type The type of system ringtone to set (CALL, NOTIFICATION, or ALARM). Default is [RingtoneType.CALL].
+     * @param onSuccess Callback invoked if the ringtone is set successfully.
+     * @param onError Callback invoked with a [Throwable] if an error occurs during the operation.
      */
     fun setSystemRingtone(
         source: RingtoneSource,
@@ -39,7 +29,7 @@ object RingtoneHelper {
         onSuccess: () -> Unit = {},
         onError: (Throwable) -> Unit = {},
     ) {
-        viewModel.setSystemRingtone(
+        ringtoneManager.setSystemRingtone(
             source = source,
             type = type,
             onSuccess = onSuccess,
@@ -47,23 +37,36 @@ object RingtoneHelper {
         )
     }
 
+    /**
+     * Sets a ringtone for a specific contact.
+     *
+     * @param source The source of the ringtone (e.g., local file, URL, or resource).
+     * @param contact The contact to which the ringtone will be assigned. Use [ContactIdentifier] for ID or phone.
+     * @param onSuccess Callback invoked if the ringtone is set successfully.
+     * @param onError Callback invoked with a [Throwable] if an error occurs during the operation.
+     */
     fun setContactRingtone(
         source: RingtoneSource,
         contact: ContactIdentifier,
         onSuccess: () -> Unit = {},
         onError: (Throwable) -> Unit = {},
     ) {
-        viewModel.applyToTarget(
+        ringtoneManager.setContactRingtone(
             source = source,
-            target = RingtoneTarget.ContactTarget.Provided(contact),
+            contact = contact,
             onSuccess = onSuccess,
-            onError = onError
+            onError = onError,
         )
     }
 
 
     /**
-     * تحميل وتطبيق نغمة على هدف معين (بما فيه Custom Target)
+     * Applies a ringtone to a given target (either system or contact).
+     *
+     * @param source The source of the ringtone.
+     * @param target The target to apply the ringtone to, either system or specific contact.
+     * @param onSuccess Callback invoked if the ringtone is applied successfully.
+     * @param onError Callback invoked with a [Throwable] if an error occurs during the operation.
      */
     fun applyToTarget(
         source: RingtoneSource,
@@ -71,6 +74,6 @@ object RingtoneHelper {
         onSuccess: () -> Unit = {},
         onError: (Throwable) -> Unit = {},
     ) {
-        viewModel.applyToTarget(source, target, onSuccess, onError)
+        ringtoneManager.applyToTarget(source, target, onSuccess, onError)
     }
 }

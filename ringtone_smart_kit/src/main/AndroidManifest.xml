@@ -12,5 +12,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
+
+        <provider
+            android:name="io.github.provider.RingtoneSmartKitInitProvider"
+            android:authorities="${applicationId}.ringtone_smart_kit_init_provider"
+            android:exported="false" />
     </application>
 </manifest>

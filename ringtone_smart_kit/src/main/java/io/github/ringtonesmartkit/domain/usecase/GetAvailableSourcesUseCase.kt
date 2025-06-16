@@ -2,8 +2,9 @@ package io.github.ringtonesmartkit.domain.usecase
 
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.repository.RingtoneRepository
+import javax.inject.Inject
 
-internal class GetAvailableSourcesUseCase(
+internal class GetAvailableSourcesUseCase @Inject constructor(
     private val ringtoneRepository: RingtoneRepository
 ){
     suspend operator fun invoke(): List<RingtoneSource> {

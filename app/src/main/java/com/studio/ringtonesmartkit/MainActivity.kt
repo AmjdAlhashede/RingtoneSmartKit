@@ -16,10 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.studio.ringtonesmartkit.ui.theme.RingtoneSmartKitTheme
 import io.github.ringtonesmartkit.api.RingtoneHelper
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
-import com.studio.ringtonesmartkit.ui.theme.RingtoneSmartKitTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +27,33 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RingtoneSmartKitTheme {
+                fun tryApplyRingtone() {
+                    RingtoneHelper.setSystemRingtone(
+                        source = RingtoneSource.FromAssets(filePath = "me/Best Ringtone.mp3"),
+                        onSuccess = {
+                            runOnUiThread {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "تم التعيين بنجاح",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        },
+                        onError = {
+                            runOnUiThread {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    it.message ?: "خطأ غير معروف",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    )
+                }
+
                 fun tryApplyContactRingtone() {
                     RingtoneHelper.setContactRingtone(
-                        source = RingtoneSource.FromAssets(filePath = "me/Best Ringtone.mp3"),
+                        source = RingtoneSource.FromAssets(filePath = "me/Gitar .mp3"),
                         contact = ContactIdentifier.Interactive,
                         onSuccess = {
                             runOnUiThread {
@@ -52,6 +76,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(
                         modifier = Modifier
@@ -61,9 +86,14 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Button(onClick = {
-                            tryApplyContactRingtone()
+                            tryApplyRingtone()
                         }) {
                             Text("اختيار مقطع صوتي")
+                        }
+                        Button(onClick = {
+                            tryApplyContactRingtone()
+                        }) {
+                            Text("اختيار مقطع d")
                         }
                     }
                 }

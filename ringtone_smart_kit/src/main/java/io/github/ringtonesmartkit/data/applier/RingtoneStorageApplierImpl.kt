@@ -4,15 +4,16 @@ import android.content.ContentValues
 import android.content.Context
 import android.media.RingtoneManager
 import android.provider.ContactsContract
-import io.github.ringtonesmartkit.viewmodules.ContactPickerViewModel
 import io.github.ringtonesmartkit.domain.applier.RingtoneStorageApplier
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.extensions.getContactUriFromIdentifier
+import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class RingtoneStorageApplierImpl(
+@Singleton
+internal class RingtoneStorageApplierImpl @Inject constructor(
     private val context: Context,
-    private val myViewModel: ContactPickerViewModel,
 ) : RingtoneStorageApplier {
 
     override suspend fun applyStorageRingtone(
@@ -43,7 +44,7 @@ internal class RingtoneStorageApplierImpl(
         when (target) {
             is RingtoneTarget.ContactTarget.Provided -> {
                 val contactUri =
-                    getContactUriFromIdentifier(myViewModel = myViewModel, target.identifier)
+                    getContactUriFromIdentifier(target.identifier)
                         ?: throw IllegalArgumentException("Invalid contact identifier")
                 val ringtoneValue = ContentValues().apply {
                     put(ContactsContract.Contacts.CUSTOM_RINGTONE, ringtone.contentUri.toString())

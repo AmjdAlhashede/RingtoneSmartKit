@@ -7,9 +7,11 @@ import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.repository.RingtoneDataSource
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-internal class StorageRingtoneDataSource(
+@Singleton
+internal class StorageRingtoneDataSource @Inject constructor(
     private val context: Context,
     private val storageApplier: RingtoneStorageApplier,
 ) : RingtoneDataSource {

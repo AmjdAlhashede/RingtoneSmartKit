@@ -14,8 +14,9 @@ import io.github.ringtonesmartkit.extensions.getFileProviderUri
 import io.github.ringtonesmartkit.extensions.nameOfPath
 import io.github.ringtonesmartkit.extensions.titleOfPath
 import java.io.File
+import javax.inject.Inject
 
-internal class AssetRingtoneDataSource(
+internal class AssetRingtoneDataSource @Inject constructor(
     private val context: Context,
     private val ringtoneAssetsApplier: RingtoneAssetsApplier,
 ) : RingtoneDataSource {

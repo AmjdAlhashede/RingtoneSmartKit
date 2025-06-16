@@ -5,13 +5,16 @@ import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.repository.RingtoneDataSource
 import io.github.ringtonesmartkit.domain.repository.RingtoneRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class RingtoneRepositoryImpl(
-    private val sources: List<RingtoneDataSource>,
+
+@Singleton
+internal class RingtoneRepositoryImpl @Inject constructor(
+    private val sources: List<@JvmSuppressWildcards RingtoneDataSource>,
 ) : RingtoneRepository {
 
-    override suspend fun getAvailableSources(): List<RingtoneSource> =
-        sources.map { it.getSourceType() }
+    override suspend fun getAvailableSources(): List<RingtoneSource> = sources.map { it.getSourceType() }
 
     override suspend fun getRingtone(source: RingtoneSource): RingtoneData? {
         return sources.firstOrNull { it.canHandle(source) }?.loadRingtone(source)

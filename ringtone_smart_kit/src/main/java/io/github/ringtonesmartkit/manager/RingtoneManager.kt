@@ -1,41 +1,25 @@
-package io.github.ringtonesmartkit.viewmodules
+package io.github.ringtonesmartkit.manager
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.github.ringtonesmartkit.api.RingtoneSmartKit
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.model.RingtoneType
-import io.github.ringtonesmartkit.extensions.runInCatchingBlock
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class ContactViewModel : ViewModel(), KoinComponent {
+@Singleton
+internal class RingtoneManager @Inject constructor(
+    private val ringtoneSmartKit: RingtoneSmartKit
+) {
 
-    private val kit by inject<RingtoneSmartKit>()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    fun loadRingtone(
-        source: RingtoneSource,
-        onLoaded: (RingtoneData?) -> Unit,
-        onError: (Throwable) -> Unit = {},
-    ) {
-
-        launchInBackground {
-            runInCatchingBlock {
-                kit.load(source)
-            }.onSuccess(onLoaded)
-                .onFailure(onError)
-        }
-    }
-
-
-    /**
-     * تحميل وتطبيق نغمة على نوع نظام معين (CALL / NOTIFICATION / ALARM)
-     */
     fun setSystemRingtone(
         source: RingtoneSource,
         type: RingtoneType = RingtoneType.CALL,
@@ -65,18 +49,15 @@ internal class ContactViewModel : ViewModel(), KoinComponent {
     }
 
 
-    /**
-     * تحميل وتطبيق نغمة على هدف معين (بما فيه Custom Target)
-     */
     fun applyToTarget(
         source: RingtoneSource,
         target: RingtoneTarget,
         onSuccess: () -> Unit = {},
         onError: (Throwable) -> Unit = {},
     ) {
-        launchInBackground {
-            runInCatchingBlock {
-                kit.loadAndApply(source, target)
+        scope.launch {
+            runCatching {
+                ringtoneSmartKit.loadAndApply(source, target)
             }.onSuccess {
                 onSuccess()
             }.onFailure(onError)
@@ -88,11 +69,4 @@ internal class ContactViewModel : ViewModel(), KoinComponent {
         RingtoneType.NOTIFICATION -> RingtoneTarget.System.Notification
         RingtoneType.ALARM -> RingtoneTarget.System.Alarm
     }
-
-    private fun launchInBackground(block: suspend () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            block()
-        }
-    }
-
 }
