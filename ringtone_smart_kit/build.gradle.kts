@@ -123,6 +123,6 @@ tasks.register<Zip>("generateRepoZip") {
 
     from(layout.buildDirectory.dir("repo"))
 
-    archiveFileName.set("RingtoneSmartKit-1.0.2.zip")
+    archiveFileName.set("ringtone_smart_kit-1.0.2.zip")
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }

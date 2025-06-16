@@ -25,4 +25,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "RingtoneSmartKitProject"
 include(":app")
-include(":RingtoneSmartKit")
+include(":ringtone_smart_kit")
