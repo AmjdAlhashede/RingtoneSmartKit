@@ -128,7 +128,7 @@ If you have suggestions, questions, or feedback, feel free to reach out:
 
 - Open an issue on [GitHub](https://github.com/AmjdAlhashede/RingtoneSmartKitProject/issues)
 - Contact me directly via [GitHub Profile](https://github.com/AmjdAlhashede)
-- Or send an email to: **amjd.alhashede@gmail.com**
+- Or send an email to: **amjdalhashede@gmail.com**
 
 
 ## Availability
