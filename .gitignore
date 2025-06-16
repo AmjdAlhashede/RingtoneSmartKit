@@ -19,5 +19,4 @@ local.properties
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 
-# ========== Signing & Secrets ==========
-gradle.properties
+
