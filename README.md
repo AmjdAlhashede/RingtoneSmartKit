@@ -83,6 +83,20 @@ RingtoneHelper.applyToTarget(
 )
 ```
 
+### Setting ringtone via interactive contact picker
+
+You can allow users to select a contact interactively without passing ID or phone manually:
+
+```kotlin
+RingtoneHelper.setContactRingtone(
+    source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3"),
+    contact = ContactIdentifier.Interactive,
+    onSuccess = { println("Contact ringtone set successfully") },
+    onError = { error -> println("Failed to set contact ringtone: ${error.message}") }
+)
+```
+
+
 ![Example of ringtone from assets](docs/assets/ringtone_assets_structure_simple.png)
 
 ### Applying ringtone from local storage (Coming soon)
