@@ -109,6 +109,38 @@ val source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audi
 ```
 
 
+## Contributing
+
+Contributions are welcome and appreciated!  
+If you find a bug, have a feature request, or want to improve the code/documentation, feel free to:
+
+- Open an issue
+- Create a pull request
+- Suggest enhancements
+
+Please make sure your changes follow the current code style and include proper documentation or tests when applicable.
+
+---
+
+## Contact
+
+If you have suggestions, questions, or feedback, feel free to reach out:
+
+- Open an issue on [GitHub](https://github.com/AmjdAlhashede/RingtoneSmartKitProject/issues)
+- Contact me directly via [GitHub Profile](https://github.com/AmjdAlhashede)
+- Or send an email to: **amjd.alhashede@gmail.com**
+
+
+## Availability
+
+This library is available via:
+
+- 📦 **Maven Central**: Easy integration using Gradle/Maven.
+- 🐙 **GitHub Packages**: Published to the GitHub repository packages as an alternative.
+- 💻 **GitHub Repository**: Source code, examples, and documentation are available here:
+  [https://github.com/AmjdAlhashede/RingtoneSmartKitProject](https://github.com/AmjdAlhashede/RingtoneSmartKitProject)
+
+
 
 ## License
 
