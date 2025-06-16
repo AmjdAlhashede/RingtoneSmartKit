@@ -5,6 +5,9 @@ plugins {
     signing
 }
 
+group = "io.github.amjdalhashede"
+version = "1.0.2"
+
 android {
     namespace = "io.github.amjdalhashede"
     compileSdk = 36
@@ -12,12 +15,18 @@ android {
     defaultConfig {
         minSdk = 22
 
+        aarMetadata {
+            minCompileSdk = 22
+        }
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     publishing {
-        singleVariant("release") {}
+        singleVariant("release") {
+            withSourcesJar()
+        }
     }
 
     buildTypes {
@@ -60,6 +69,7 @@ afterEvaluate {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
+
                 groupId = "io.github.amjdalhashede"
                 artifactId = "ringtone-smart-kit"
                 version = "1.0.2"
@@ -91,27 +101,28 @@ afterEvaluate {
                     }
                 }
             }
+
         }
 
         repositories {
             maven {
-                name = "Sonatype"
-                url = uri(
-                    if (version.toString().endsWith("SNAPSHOT"))
-                        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-                    else
-                        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                )
-                credentials {
-                    username = findProperty("ossrhUsername") as String? ?: System.getenv("OSSRH_USERNAME")
-                    password = findProperty("ossrhPassword") as String? ?: System.getenv("OSSRH_PASSWORD")
-                }
+                name = "myrepo"
+                url = uri(layout.buildDirectory.dir("repo"))
             }
         }
     }
-
     signing {
         useGpgCmd()
         sign(publishing.publications["release"])
     }
+}
+
+
+tasks.register<Zip>("generateRepoZip") {
+    dependsOn("publishReleasePublicationToMyrepoRepository")
+
+    from(layout.buildDirectory.dir("repo"))
+
+    archiveFileName.set("RingtoneSmartKit-1.0.2.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }
