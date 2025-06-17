@@ -32,24 +32,31 @@ implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha")
 
 ## Required Permissions
 
-| Feature                          | Required Permissions                                                                                      | Notes                                                                                   |
-|---------------------------------|----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| **Set System Ringtone**          | - `android.permission.WRITE_SETTINGS`<br>- `android.permission.READ_EXTERNAL_STORAGE` (for files on storage, API ≤ 32)<br>- `android.permission.WRITE_EXTERNAL_STORAGE` (API ≤ 32 only) | `WRITE_SETTINGS` permission is mandatory to change system ringtone.<br>Storage permissions needed only on older Android versions (API 32 and below). |
-| **Set Contact Ringtone**         | - `android.permission.READ_EXTERNAL_STORAGE` (if ringtone from storage, API ≤ 32)<br>- `android.permission.WRITE_EXTERNAL_STORAGE` (API ≤ 32 only) | Storage permissions only on older devices.<br>Contacts permissions NOT required in this setup. |
-| **Interactive Contact Picker**   | No extra permissions needed if contacts permissions are not declared.                                     | Contact picker might not work fully without contact permissions.                        |
+| Feature                    | Required Permissions                                                                                      | Notes                                                                                   |
+|----------------------------|----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| **Set System Ringtone**    | - `android.permission.WRITE_SETTINGS`<br>- `android.permission.READ_EXTERNAL_STORAGE` (API ≤ 32)<br>- `android.permission.WRITE_EXTERNAL_STORAGE` (API ≤ 32) | Required to change system ringtone and access local files (on older Android versions). |
+| **Set Contact Ringtone**   | - `android.permission.READ_CONTACTS`<br>- `android.permission.WRITE_CONTACTS`<br>- `android.permission.READ_EXTERNAL_STORAGE` (API ≤ 32)<br>- `android.permission.WRITE_EXTERNAL_STORAGE` (API ≤ 32) | Required to update contact ringtones and access files from storage.                    |
+| **Interactive Contact Picker** | - `android.permission.READ_CONTACTS`<br>- `android.permission.WRITE_CONTACTS`                          | Required for selecting and modifying contact info interactively.                        |
 
 ---
 
 ### Add these permissions in your AndroidManifest.xml (copy one line at a time):
+
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 ``` 
+
 ```xml
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:ignore="ScopedStorage" />
 ```
 
 ```xml
 <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+```
+
+```xml
+<uses-permission android:name="android.permission.READ_CONTACTS" />
+<uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
 
 
