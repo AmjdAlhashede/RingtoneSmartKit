@@ -72,7 +72,7 @@ afterEvaluate {
                 pom {
                     name.set("Ringtone Smart Kit")
                     description.set("Android library to set ringtones from various sources.")
-                    url.set("https://github.com/AmjdAlhashede/RingtoneSmartKitProject")
+                    url.set("https://github.com/AmjdAlhashede/RingtoneSmartKit")
 
                     licenses {
                         license {
@@ -90,9 +90,9 @@ afterEvaluate {
                     }
 
                     scm {
-                        connection.set("scm:git:git://github.com/AmjdAlhashede/RingtoneSmartKitProject.git")
-                        developerConnection.set("scm:git:ssh://git@github.com/AmjdAlhashede/RingtoneSmartKitProject.git")
-                        url.set("https://github.com/AmjdAlhashede/RingtoneSmartKitProject")
+                        connection.set("scm:git:git://github.com/AmjdAlhashede/RingtoneSmartKit.git")
+                        developerConnection.set("scm:git:ssh://git@github.com/AmjdAlhashede/RingtoneSmartKit.git")
+                        url.set("https://github.com/AmjdAlhashede/RingtoneSmartKit")
                     }
                 }
             }
@@ -141,7 +141,7 @@ tasks.register<Zip>("generateRepoZip") {
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }
 
-tasks.register("publishToMavenCentral") {
-    dependsOn("publishReleasePublicationToSonatypeRepository", "closeAndReleaseSonatypeStagingRepository")
-}
+//tasks.register("publishToMavenCentral") {
+//    dependsOn("publishReleasePublicationToSonatypeRepository", "closeAndReleaseSonatypeStagingRepository")
+//}
 
