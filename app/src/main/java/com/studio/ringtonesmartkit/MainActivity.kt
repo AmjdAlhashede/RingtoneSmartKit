@@ -28,52 +28,43 @@ class MainActivity : ComponentActivity() {
         setContent {
             RingtoneSmartKitTheme {
                 fun tryApplyRingtone() {
-                    RingtoneHelper.setSystemRingtone(
-                        source = RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3"),
-                        onSuccess = {
+                    RingtoneHelper.setSystemRingtone(source = RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3"))
+                        .onSuccess {
                             runOnUiThread {
                                 Toast.makeText(
-                                    this@MainActivity,
-                                    "تم التعيين بنجاح",
-                                    Toast.LENGTH_LONG
+                                    this@MainActivity, "تم التعيين بنجاح", Toast.LENGTH_LONG
                                 ).show()
                             }
-                        },
-                        onError = {
+                        }.onFailure { error ->
                             runOnUiThread {
                                 Toast.makeText(
                                     this@MainActivity,
-                                    it.message ?: "خطأ غير معروف",
+                                    error.message ?: "خطأ غير معروف",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
                         }
-                    )
                 }
 
                 fun tryApplyContactRingtone() {
                     RingtoneHelper.setContactRingtone(
-                        source = RingtoneSource.FromAssets(filePath = "ringtones/Gitar .mp3"),
-                        contact = ContactIdentifier.Interactive,
-                        onSuccess = {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "تم التعيين بنجاح",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        },
-                        onError = {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    it.message ?: "خطأ غير معروف",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
+                        source = RingtoneSource.FromAssets(filePath = "ringtones/Gitar.mp3"),
+                        contact = ContactIdentifier.Interactive
+                    ).onSuccess { contactInfo ->
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@MainActivity, "${contactInfo?.displayName}", Toast.LENGTH_LONG
+                            ).show()
                         }
-                    )
+                    }.onFailure { error ->
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@MainActivity,
+                                error.message ?: "خطأ غير معروف",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
 
 
@@ -105,8 +96,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
-        modifier = modifier
+        text = "Hello $name!", modifier = modifier
     )
 }
 

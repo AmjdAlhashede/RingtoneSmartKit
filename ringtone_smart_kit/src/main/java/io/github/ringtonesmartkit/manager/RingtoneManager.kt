@@ -18,8 +18,10 @@
 package io.github.ringtonesmartkit.manager
 
 import io.github.ringtonesmartkit.api.RingtoneSmartKit
+import io.github.ringtonesmartkit.data.ringtoneresult.ContactRingtoneResultHandler
+import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResultHandler
+import io.github.ringtonesmartkit.data.ringtoneresult.SystemRingtoneResultHandler
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
-import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.model.RingtoneType
@@ -32,7 +34,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class RingtoneManager @Inject constructor(
-    private val ringtoneSmartKit: RingtoneSmartKit
+    private val ringtoneSmartKit: RingtoneSmartKit,
 ) {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -40,45 +42,40 @@ internal class RingtoneManager @Inject constructor(
     fun setSystemRingtone(
         source: RingtoneSource,
         type: RingtoneType = RingtoneType.CALL,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-    ) {
-        applyToTarget(
-            source = source,
-            target = mapSystemTypeToTarget(type),
-            onSuccess = onSuccess,
-            onError = onError
-        )
+    ): SystemRingtoneResultHandler {
+        val target = mapSystemTypeToTarget(type)
+        return applyToTarget(source, target) as SystemRingtoneResultHandler
     }
 
     fun setContactRingtone(
         source: RingtoneSource,
         contact: ContactIdentifier,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-    ) {
-        applyToTarget(
-            source = source,
-            target = RingtoneTarget.ContactTarget.Provided(contact),
-            onSuccess = onSuccess,
-            onError = onError
-        )
+    ): ContactRingtoneResultHandler {
+        val target = RingtoneTarget.ContactTarget.Provided(contact)
+        return applyToTarget(source, target) as ContactRingtoneResultHandler
     }
-
 
     fun applyToTarget(
         source: RingtoneSource,
         target: RingtoneTarget,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-    ) {
+    ): RingtoneApplyResultHandler {
+
+        val handler: RingtoneApplyResultHandler = when(target) {
+            is RingtoneTarget.System -> SystemRingtoneResultHandler()
+            is RingtoneTarget.ContactTarget -> ContactRingtoneResultHandler()
+        }
+
         scope.launch {
             runCatching {
-                ringtoneSmartKit.loadAndApply(source, target)
-            }.onSuccess {
-                onSuccess()
-            }.onFailure(onError)
+                ringtoneSmartKit.loadAndApplyTarget(source, target)
+            }.onSuccess { result ->
+                handler.invokeSuccess(result)
+            }.onFailure { throwable ->
+                handler.invokeFailure(throwable)
+            }
         }
+
+        return handler
     }
 
     private fun mapSystemTypeToTarget(type: RingtoneType): RingtoneTarget.System = when (type) {

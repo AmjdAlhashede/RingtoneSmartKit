@@ -21,6 +21,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
 import io.github.ringtonesmartkit.domain.applier.RingtoneAssetsApplier
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
@@ -100,8 +101,8 @@ internal class AssetRingtoneDataSource @Inject constructor(
         source: RingtoneSource,
         target: RingtoneTarget.ContactTarget,
         data: RingtoneData,
-    ) {
-        ringtoneAssetsApplier.applyAssetsContact(
+    ): ContactInfo? {
+      return  ringtoneAssetsApplier.applyAssetsContact(
             source =source,
             target = target,
             ringtone = data

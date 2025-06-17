@@ -17,6 +17,7 @@
 
 package io.github.ringtonesmartkit.data.repository
 
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
@@ -50,8 +51,8 @@ internal class RingtoneRepositoryImpl @Inject constructor(
         source: RingtoneSource,
         target: RingtoneTarget.ContactTarget,
         data: RingtoneData,
-    ) {
-        sources.firstOrNull { it.canHandle(source) }
+    ) : ContactInfo? {
+       return sources.firstOrNull { it.canHandle(source) }
             ?.applyRingtonesToContact(
                 source = source,
                 target = target,

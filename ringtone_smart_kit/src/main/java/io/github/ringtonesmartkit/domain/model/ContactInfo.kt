@@ -15,13 +15,12 @@
  *
  */
 
-package io.github.ringtonesmartkit.domain.applier
+package io.github.ringtonesmartkit.domain.model
 
-import io.github.ringtonesmartkit.domain.model.ContactInfo
-import io.github.ringtonesmartkit.domain.model.RingtoneData
-import io.github.ringtonesmartkit.domain.model.RingtoneTarget
+import android.net.Uri
 
-internal interface RingtoneStorageApplier {
-    suspend fun applyStorageRingtone(target: RingtoneTarget.System, ringtone: RingtoneData)
-    suspend fun applyStorageRingtoneContacts(target: RingtoneTarget.ContactTarget, ringtone: RingtoneData) : ContactInfo?
-}
+data class ContactInfo(
+    val contactUri: Uri,
+    val displayName: String?,
+    val phoneNumber: String?
+)

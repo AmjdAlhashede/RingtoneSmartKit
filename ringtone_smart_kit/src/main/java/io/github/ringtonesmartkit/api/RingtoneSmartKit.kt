@@ -17,7 +17,9 @@
 
 package io.github.ringtonesmartkit.api
 
-import io.github.ringtonesmartkit.domain.model.RingtoneData
+import io.github.ringtonesmartkit.data.ringtoneresult.ContactRingtoneResult
+import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResult
+import io.github.ringtonesmartkit.data.ringtoneresult.SystemRingtoneResult
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.usecase.ApplyContactRingtoneUseCase
@@ -34,52 +36,45 @@ internal class RingtoneSmartKit @Inject constructor(
     private val applyContactRingtoneUseCase: ApplyContactRingtoneUseCase,
 ) {
 
-    /**
-     * يقوم بتحميل النغمة من المصدر المحدد ثم يطبقها على الهدف.
-     */
-    suspend fun loadAndApply(
+    suspend fun loadAndApplyTarget(
         source: RingtoneSource,
         target: RingtoneTarget,
-    ) {
+    ): RingtoneApplyResult {
+        return try {
+            val ringtone = loadRingtone(source)
+                ?: return when (target) {
+                    is RingtoneTarget.System -> SystemRingtoneResult.Failure(
+                        IllegalStateException("Ringtone could not be loaded")
+                    )
 
-        when (target) {
-            is RingtoneTarget.System -> {
-                val ringtone = load(source)
-                ringtone?.let { applyToRingtone(source = source, target = target, ringtone = it) }
+                    is RingtoneTarget.ContactTarget -> ContactRingtoneResult.Failure(
+                        IllegalStateException("Ringtone could not be loaded")
+                    )
+                }
+
+            when (target) {
+                is RingtoneTarget.System -> {
+                    applyRingtone(source = source, target = target, ringtone = ringtone)
+                    SystemRingtoneResult.Success
+                }
+
+                is RingtoneTarget.ContactTarget -> {
+                    val info = applyContactRingtoneUseCase(
+                        source = source,
+                        target = target,
+                        ringtone = ringtone
+                    )
+
+                    info?.let(ContactRingtoneResult::Success) ?: ContactRingtoneResult.Failure(
+                        IllegalStateException("No contact info returned")
+                    )
+                }
             }
-
-            is RingtoneTarget.ContactTarget -> {
-                val ringtone = load(source)
-                ringtone?.let { applyToContacts(source = source, target = target, ringtone = it) }
+        } catch (e: Throwable) {
+            when (target) {
+                is RingtoneTarget.System -> SystemRingtoneResult.Failure(e)
+                is RingtoneTarget.ContactTarget -> ContactRingtoneResult.Failure(e)
             }
         }
-    }
-
-    /**
-     * تحميل النغمة فقط بدون تطبيقها.
-     */
-    suspend fun load(source: RingtoneSource) = loadRingtone(source)
-
-    /**
-     * تطبيق نغمة معينة (قمت بتحميلها مسبقًا).
-     */
-    suspend fun applyToRingtone(
-        source: RingtoneSource,
-        target: RingtoneTarget.System,
-        ringtone: RingtoneData,
-    ) {
-        applyRingtone(source = source, target = target, ringtone = ringtone)
-    }
-
-    suspend fun applyToContacts(
-       source: RingtoneSource,
-       target: RingtoneTarget.ContactTarget,
-       ringtone: RingtoneData
-    ){
-        applyContactRingtoneUseCase(
-            source = source,
-            target = target,
-            ringtone = ringtone
-        )
     }
 }

@@ -20,6 +20,7 @@ package io.github.ringtonesmartkit.data.source
 import android.content.Context
 import android.net.Uri
 import io.github.ringtonesmartkit.domain.applier.RingtoneStorageApplier
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
@@ -64,12 +65,13 @@ internal class StorageRingtoneDataSource @Inject constructor(
         )
     }
 
+
     override suspend fun applyRingtonesToContact(
         source: RingtoneSource,
         target: RingtoneTarget.ContactTarget,
         data: RingtoneData,
-    ) {
-        storageApplier.applyStorageRingtoneContacts(
+    ): ContactInfo? {
+        return storageApplier.applyStorageRingtoneContacts(
             target = target,
             ringtone = data
         )

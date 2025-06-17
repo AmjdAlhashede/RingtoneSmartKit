@@ -17,6 +17,7 @@
 
 package io.github.ringtonesmartkit.domain.repository
 
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
@@ -37,5 +38,5 @@ internal interface RingtoneDataSource {
         source: RingtoneSource,
         target: RingtoneTarget.ContactTarget,
         data: RingtoneData,
-    )
+    ): ContactInfo?
 }

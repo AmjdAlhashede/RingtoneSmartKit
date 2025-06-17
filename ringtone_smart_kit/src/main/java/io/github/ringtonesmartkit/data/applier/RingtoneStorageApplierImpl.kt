@@ -22,9 +22,10 @@ import android.content.Context
 import android.media.RingtoneManager
 import android.provider.ContactsContract
 import io.github.ringtonesmartkit.domain.applier.RingtoneStorageApplier
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
-import io.github.ringtonesmartkit.extensions.getContactUriFromIdentifier
+import io.github.ringtonesmartkit.extensions.getContactInfoFromIdentifier
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,23 +57,29 @@ internal class RingtoneStorageApplierImpl @Inject constructor(
     override suspend fun applyStorageRingtoneContacts(
         target: RingtoneTarget.ContactTarget,
         ringtone: RingtoneData,
-    ) {
+    ): ContactInfo? {
 
-        when (target) {
+        return when (target) {
             is RingtoneTarget.ContactTarget.Provided -> {
-                val contactUri =
-                    getContactUriFromIdentifier(target.identifier)
+                val contactInfo =
+                    getContactInfoFromIdentifier(context = context, target.identifier)
                         ?: throw IllegalArgumentException("Invalid contact identifier")
                 val ringtoneValue = ContentValues().apply {
                     put(ContactsContract.Contacts.CUSTOM_RINGTONE, ringtone.contentUri.toString())
                 }
 
                 val rowsUpdated =
-                    context.contentResolver.update(contactUri, ringtoneValue, null, null)
+                    context.contentResolver.update(
+                        contactInfo.contactUri,
+                        ringtoneValue,
+                        null,
+                        null
+                    )
 
                 if (rowsUpdated <= 0) {
                     throw IllegalStateException("Failed to update contact with ringtone")
                 }
+                contactInfo
             }
         }
     }

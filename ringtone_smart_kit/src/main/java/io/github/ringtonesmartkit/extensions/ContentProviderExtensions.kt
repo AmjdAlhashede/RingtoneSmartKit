@@ -24,6 +24,7 @@ import android.provider.ContactsContract
 import android.provider.MediaStore
 import io.github.ringtonesmartkit.contract.pickContact
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 
 
 internal fun Context.getMimeType(uri: Uri): String? {
@@ -37,23 +38,127 @@ internal fun ContentValues.finalizePending(context: Context, uri: Uri) {
     context.contentResolver.update(uri, this, null, null)
 }
 
-internal suspend fun getContactUriFromIdentifier(
+
+//internal suspend fun getContactUriFromIdentifier(
+//    context: Context,
+//    identifier: ContactIdentifier,
+//): ContactInfo? {
+//    return when (identifier) {
+//        is ContactIdentifier.ByUri -> {
+//            identifier.uri
+//        }
+//        is ContactIdentifier.ById -> {
+//            Uri.withAppendedPath(
+//                ContactsContract.Contacts.CONTENT_URI, identifier.id.toString()
+//            )
+//        }
+//
+//        is ContactIdentifier.ByPhone -> {
+//            val phoneNumber = identifier.phone
+//            val contentResolver = context.contentResolver
+//
+//            val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+//            val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+//            val selection = "${ContactsContract.CommonDataKinds.Phone.NUMBER} = ?"
+//            val selectionArgs = arrayOf(phoneNumber)
+//
+//            var contactUri: Uri? = null
+//
+//            val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+//            cursor?.use {
+//                if (it.moveToFirst()) {
+//                    val contactId = it.getLong(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+//                    contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contactId.toString())
+//                }
+//            }
+//            contactUri
+//        }
+//
+//        ContactIdentifier.Interactive -> {
+//            val result = pickContact()
+//            printString(result)
+//            result
+//        }
+//    }
+//}
+
+internal suspend fun getContactInfoFromIdentifier(
+    context: Context,
     identifier: ContactIdentifier,
-): Uri? {
-    return when (identifier) {
+): ContactInfo? {
+    val contactUri: Uri? = when (identifier) {
         is ContactIdentifier.ByUri -> identifier.uri
+
         is ContactIdentifier.ById -> Uri.withAppendedPath(
             ContactsContract.Contacts.CONTENT_URI, identifier.id.toString()
         )
 
         is ContactIdentifier.ByPhone -> {
-            null
+            val phoneNumber = identifier.phone
+            val contentResolver = context.contentResolver
+
+            val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+            val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+            val selection = "${ContactsContract.CommonDataKinds.Phone.NUMBER} = ?"
+            val selectionArgs = arrayOf(phoneNumber)
+
+            var contactUri: Uri? = null
+
+            val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val contactId =
+                        it.getLong(it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                    contactUri = Uri.withAppendedPath(
+                        ContactsContract.Contacts.CONTENT_URI,
+                        contactId.toString()
+                    )
+                }
+            }
+            contactUri
         }
 
         ContactIdentifier.Interactive -> {
-            val result = pickContact()
-            printString(result)
-            result
+            pickContact()
         }
     }
+
+    return if (contactUri != null) getContactInfoFromUri(context, contactUri) else null
+}
+
+
+@Throws(IllegalArgumentException::class)
+internal suspend fun getContactInfoFromUri(context: Context, contactUri: Uri): ContactInfo? {
+    val contentResolver = context.contentResolver
+
+
+    val projectionContact = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+    var displayName: String? = null
+
+    contentResolver.query(contactUri, projectionContact, null, null, null)?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            val nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            if (nameIndex != -1) {
+                displayName = cursor.getString(nameIndex)
+            }
+        }
+    }
+
+
+    val contactId = contactUri.lastPathSegment ?: return null
+    val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+    val projectionPhone = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
+    val selection = "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?"
+    val selectionArgs = arrayOf(contactId)
+
+    var phoneNumber: String? = null
+    contentResolver.query(phoneUri, projectionPhone, selection, selectionArgs, null)
+        ?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                phoneNumber =
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            }
+        }
+
+    return ContactInfo(contactUri, displayName, phoneNumber)
 }

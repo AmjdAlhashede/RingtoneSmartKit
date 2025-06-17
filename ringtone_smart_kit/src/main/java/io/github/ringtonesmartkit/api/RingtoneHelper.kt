@@ -18,6 +18,9 @@
 package io.github.ringtonesmartkit.api
 
 import io.github.provider.RingtoneSmartKitInitProvider
+import io.github.ringtonesmartkit.data.ringtoneresult.ContactRingtoneResultHandler
+import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResultHandler
+import io.github.ringtonesmartkit.data.ringtoneresult.SystemRingtoneResultHandler
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
@@ -26,71 +29,52 @@ import io.github.ringtonesmartkit.domain.model.RingtoneType
 /**
  * Helper object that provides a simplified API for setting system and contact ringtones.
  *
- * Uses the underlying RingtoneManager implementation from the DI provider.
+ * Internally delegates to [RingtoneHelper] through dependency injection.
  */
 object RingtoneHelper {
 
     private val ringtoneManager = RingtoneSmartKitInitProvider.component.provideRingtoneManager()
 
     /**
-     * Sets the device's system ringtone from a given source.
+     * Sets the system ringtone (calls, notifications, alarms).
      *
-     * @param source The source of the ringtone (e.g., local file, URL, or resource).
-     * @param type The type of system ringtone to set (CALL, NOTIFICATION, or ALARM). Default is [RingtoneType.CALL].
-     * @param onSuccess Callback invoked if the ringtone is set successfully.
-     * @param onError Callback invoked with a [Throwable] if an error occurs during the operation.
+     * @param source Ringtone source (asset, storage, etc.).
+     * @param type Ringtone type: CALL, NOTIFICATION, ALARM.
+     * @return SystemRingtoneResultHandler with async callbacks.
      */
     fun setSystemRingtone(
         source: RingtoneSource,
-        type: RingtoneType = RingtoneType.CALL,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-    ) {
-        ringtoneManager.setSystemRingtone(
-            source = source,
-            type = type,
-            onSuccess = onSuccess,
-            onError = onError
-        )
+        type: RingtoneType = RingtoneType.CALL
+    ): SystemRingtoneResultHandler {
+        return ringtoneManager.setSystemRingtone(source, type)
     }
 
     /**
      * Sets a ringtone for a specific contact.
      *
-     * @param source The source of the ringtone (e.g., local file, URL, or resource).
-     * @param contact The contact to which the ringtone will be assigned. Use [ContactIdentifier] for ID or phone.
-     * @param onSuccess Callback invoked if the ringtone is set successfully.
-     * @param onError Callback invoked with a [Throwable] if an error occurs during the operation.
+     * @param source Ringtone source.
+     * @param contact Contact identifier (ById, ByPhone, Interactive, etc.).
+     * @return ContactRingtoneResultHandler with async callbacks.
      */
     fun setContactRingtone(
         source: RingtoneSource,
-        contact: ContactIdentifier,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-    ) {
-        ringtoneManager.setContactRingtone(
-            source = source,
-            contact = contact,
-            onSuccess = onSuccess,
-            onError = onError,
-        )
+        contact: ContactIdentifier
+    ): ContactRingtoneResultHandler {
+        return ringtoneManager.setContactRingtone(source, contact)
     }
 
-
     /**
-     * Applies a ringtone to a given target (either system or contact).
+     * Applies a ringtone to a generic target (system or contact).
      *
-     * @param source The source of the ringtone.
-     * @param target The target to apply the ringtone to, either system or specific contact.
-     * @param onSuccess Callback invoked if the ringtone is applied successfully.
-     * @param onError Callback invoked with a [Throwable] if an error occurs during the operation.
+     * @param source Ringtone source.
+     * @param target Target to apply ringtone to.
+     * @return RingtoneApplyResultHandler with async callbacks.
      */
     fun applyToTarget(
         source: RingtoneSource,
-        target: RingtoneTarget,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-    ) {
-        ringtoneManager.applyToTarget(source, target, onSuccess, onError)
+        target: RingtoneTarget
+    ): RingtoneApplyResultHandler {
+        return ringtoneManager.applyToTarget(source, target)
     }
 }
+
