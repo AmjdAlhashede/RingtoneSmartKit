@@ -21,13 +21,13 @@ Add the following dependency to your `build.gradle` or `build.gradle.kts` file:
 ### Gradle Groovy (build.gradle)
 
 ```groovy
-implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha"
+implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.3-alpha"
 ```
 
 ### Gradle Kotlin DSL (build.gradle.kts)
 
 ```kotlin
-implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.2-alpha")
+implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.3-alpha")
 ```
 
 ## Required Permissions
