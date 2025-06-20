@@ -56,7 +56,10 @@ implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.3-alpha")
 ```
 
 ```xml
- <uses-permission android:name="android.permission.READ_CONTACTS" />
+ <uses-permission android:name="android.permission.READ_CONTACTS" /> 
+```
+ 
+```xml
  <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
 
