@@ -1,3 +1,4 @@
+![Cover Image](docs/assets/ringtone_smart_kit_cover_image.png)
 # RingtoneSmartKit
 
 A Kotlin library for easy ringtone management on Android, supporting multiple ringtone sources and
@@ -55,8 +56,8 @@ implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.3-alpha")
 ```
 
 ```xml
-<uses-permission android:name="android.permission.READ_CONTACTS" />
-<uses-permission android:name="android.permission.WRITE_CONTACTS" />
+ <uses-permission android:name="android.permission.READ_CONTACTS" />
+ <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
 
 
