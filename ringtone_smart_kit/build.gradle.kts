@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.amjdalhashede"
-version = "1.0.3-alpha"
+version = "1.0.3-beta"
 
 android {
     namespace = "io.github.amjdalhashede"
@@ -69,7 +69,7 @@ afterEvaluate {
 
                 groupId = "io.github.amjdalhashede"
                 artifactId = "ringtone-smart-kit"
-                version = "1.0.3-alpha"
+                version = "1.0.3-beta"
 
                 pom {
                     name.set("Ringtone Smart Kit")
@@ -139,11 +139,7 @@ tasks.register<Zip>("generateRepoZip") {
 
     from(layout.buildDirectory.dir("repo"))
 
-    archiveFileName.set("ringtone_smart_kit-1.0.3-alpha.zip")
+    archiveFileName.set("ringtone_smart_kit-1.0.3-beta.zip")
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }
-
-//tasks.register("publishToMavenCentral") {
-//    dependsOn("publishReleasePublicationToSonatypeRepository", "closeAndReleaseSonatypeStagingRepository")
-//}
 
