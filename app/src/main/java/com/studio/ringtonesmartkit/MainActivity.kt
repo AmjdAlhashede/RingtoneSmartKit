@@ -18,7 +18,6 @@
 package com.studio.ringtonesmartkit
 
 import android.os.Bundle
-import android.os.Environment
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -47,6 +46,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             RingtoneSmartKitTheme {
                 fun tryApplyRingtone() {
+
+
                     RingtoneHelper.setSystemRingtone(source = RingtoneSource.FromAssets(filePath = "ringtone_name.mp3"))
                         .onSuccess {
                             runOnUiThread {
@@ -67,13 +68,13 @@ class MainActivity : ComponentActivity() {
 
                 fun tryApplyContactRingtone() {
                     RingtoneHelper.setContactRingtone(
-                        source = RingtoneSource.FromAssets(filePath = "ringtones/Guitar.mp3"),
+                        source = RingtoneSource.FromAssets(filePath = "ringtones/Guitar.mp3", outputDirPath = filesDir.path),
                         contact = ContactIdentifier.ByPhone("+1234567890")
                     ).onSuccess { contactInfo ->
                         println("==================================== $contactInfo =================== ")
                         runOnUiThread {
                             Toast.makeText(
-                                this@MainActivity, "${contactInfo?.displayName}", Toast.LENGTH_LONG
+                                this@MainActivity, "${contactInfo.displayName}", Toast.LENGTH_LONG
                             ).show()
                         }
                     }.onFailure { error ->
