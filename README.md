@@ -120,15 +120,21 @@ RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
 
 You can target the ringtone to:
 
-```kotlin
+```kotlin 
 // System-wide ringtone, alarm, or notification:
-RingtoneTarget.System(RingtoneType.RINGTONE) // or ALARM, NOTIFICATION
+RingtoneType.RINGTONE // or ALARM, NOTIFICATION
 
-// A specific contact by phone number or ID:
-RingtoneTarget.Contact(ContactIdentifier.ByPhone("+1234567890"))
+// A specific contact by URI:
+ContactIdentifier.ByUri(contactUri)
 
-// Interactive contact picker:
-RingtoneTarget.Contact(ContactIdentifier.Interactive)
+// A specific contact by ID:
+ContactIdentifier.ById(42L)
+
+// A specific contact by phone number:
+ContactIdentifier.ByPhone("+1234567890")
+
+// Interactive contact picker (select contact at runtime):
+ContactIdentifier.Interactive
 ```
 
 ---
@@ -178,9 +184,6 @@ Support for setting ringtones directly from remote URLs:
 ```kotlin
 RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
 ```
-
-
-
  
  
 ## Contact

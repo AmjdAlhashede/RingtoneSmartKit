@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 fun tryApplyContactRingtone() {
                     RingtoneHelper.setContactRingtone(
                         source = RingtoneSource.FromAssets(filePath = "ringtones/Guitar.mp3"),
-                        contact = ContactIdentifier.ById(id = 56177)
+                        contact = ContactIdentifier.ByPhone("+1234567890")
                     ).onSuccess { contactInfo ->
                         println("==================================== $contactInfo =================== ")
                         runOnUiThread {
