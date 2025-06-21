@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":ringtone_smart_kit:di"))
+    api(project(":ringtone_smart_kit:domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 

@@ -64,147 +64,125 @@ implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.3-alpha")
 ```
 
 
+## 🎯 Usage
 
-## Usage
-
-### 1. Setting a system ringtone
-
-```kotlin
-RingtoneHelper.setSystemRingtone(
-    source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3")
-).onSuccess {
-    println("System ringtone set successfully")
-}.onFailure { error ->
-    println("Failed to set system ringtone: ${error.message ?: "Unknown error"}")
-}.onDone {
-    println("Operation completed")
-}
-```
-
----
-
-### 2. Setting a ringtone for a specific contact
+All ringtone operations follow the same pattern:
 
 ```kotlin
-val contact = ContactIdentifier.ByPhone("+1234567890")
-
-RingtoneHelper.setContactRingtone(
-    source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3"),
-    contact = contact
-).onSuccess { contactInfo ->
-    println("Contact ringtone set successfully for: ${contactInfo?.displayName}")
-}.onFailure { error ->
-    println("Failed to set contact ringtone: ${error.message ?: "Unknown error"}")
-}.onDone {
-    println("Operation completed")
-}
-
-```
-
----
-
-### 3. Applying ringtone to any target (system or contact)
-
-```kotlin
-val target = RingtoneTarget.Contact(ContactIdentifier.ById(42))
-
 RingtoneHelper.applyToTarget(
-    source = RingtoneSource.FromAssets("another_ringtone.mp3"),
-    target = target
-).onSuccess {
-    println("Ringtone applied successfully")
+    source = /* any RingtoneSource */,
+    target = /* any RingtoneTarget */
+).onSuccess { result ->
+    // Successfully applied ringtone
+    // NOTE: result is only non-null for contact targets
 }.onFailure { error ->
-    println("Error applying ringtone: ${error.message ?: "Unknown error"}")
+    // Handle the error
 }.onDone {
-    println("Operation completed")
+    // Runs after success or failure
 }
+```
 
+> ℹ️ **Important:** The `onSuccess` callback has different signatures depending on the target:
+>
+> - For contact ringtones: `onSuccess(block: (ContactInfo) -> Unit)`, where the `ContactInfo` contains contact details.
+> - For system ringtones (e.g. Ringtone, Alarm, Notification): `onSuccess(block: () -> Unit)`, so no `ContactInfo` is passed and there is no `result` object.
+
+---
+
+## 🎵 RingtoneSource
+
+You can load ringtones from different types of sources:
+
+```kotlin
+// From the app's assets directory:
+RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3")
+
+// From device storage:
+RingtoneSource.FromStorage(uri = Uri.parse("content://media/internal/audio/media/10"))
+
+// Coming soon — From a remote URL:
+RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
+```
+
+> ⚠️ **About asset file paths** You can use any of these path styles for assets:
+>
+> ```kotlin
+> RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3")
+> RingtoneSource.FromAssets(filePath = "assets/ringtones/my_ringtone.mp3")
+> RingtoneSource.FromAssets(filePath = "file:///android_assets/ringtones/my_ringtone.mp3")
+> ```
+>
+> Internally, `RingtoneHelper` will normalize these paths, so feel free to use whichever style you prefer. ✅ Recommendation: Use `ringtones/my_ringtone.mp3` for a concise path.
+
+---
+
+## 🎧 RingtoneTarget
+
+You can target the ringtone to:
+
+```kotlin
+// System-wide ringtone, alarm, or notification:
+RingtoneTarget.System(RingtoneType.RINGTONE) // or ALARM, NOTIFICATION
+
+// A specific contact by phone number or ID:
+RingtoneTarget.Contact(ContactIdentifier.ByPhone("+1234567890"))
+
+// Interactive contact picker:
+RingtoneTarget.Contact(ContactIdentifier.Interactive)
 ```
 
 ---
 
-### 4. Applying ringtone from local storage
+## 💡 Callbacks
 
-```kotlin
-val source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audio/media/10"))
-
-RingtoneHelper.setSystemRingtone(
-    source = source,
-    type = RingtoneType.ALARM
-).onSuccess {
-    println("Alarm ringtone set successfully")
-}.onFailure {
-    println("Failed to set ringtone from storage")
-}.onDone {
-    println("Operation completed")
-}
-
-```
+| Callback    | Triggered when...                                                                                                     |
+| ----------- | --------------------------------------------------------------------------------------------------------------------- |
+| `onSuccess` | Ringtone is successfully set. Either provides `ContactInfo` if a contact target or no arguments for system ringtones. |
+| `onFailure` | An error occurs. Provides a `Throwable` for debugging.                                                                |
+| `onDone`    | Operation finishes (either success or failure).                                                                       |
 
 ---
 
-### 5. Setting ringtone via interactive contact picker
+## 💻 Quick Examples
+
+#### 🎯 Set the device's ringtone from assets:
 
 ```kotlin
-RingtoneHelper.setContactRingtone(
+RingtoneHelper.applyToTarget(
     source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3"),
-    contact = ContactIdentifier.Interactive
-).onSuccess { info ->
-    println("Contact ringtone set for: ${info?.displayName}")
-}.onFailure { error ->
-    println("Failed to set contact ringtone: ${error.message ?: "Unknown error"}")
-}.onDone {
-    println("Operation completed")
-}
-
-```
-
----
-
-### Callback Behavior Comparison
-
-| Callback    | Triggered when...                                    | Contact Ringtone Specifics                        |
-|-------------|------------------------------------------------------|---------------------------------------------------|
-| `onSuccess` | Ringtone is applied successfully                     | Returns `ContactInfo?` containing contact details |
-| `onError`   | An error occurs while applying the ringtone          | Returns the thrown `Throwable`                    |
-| `onDone`    | Operation completes (whether it succeeded or failed) | Can be used to dismiss loaders, etc.              |
-
-## Sources available for ringtones
-
-```kotlin
-sealed class RingtoneSource {
-    data class FromAssets(val filePath: String, val outputDirPath: String = "") : RingtoneSource()
-    data class FromStorage(val uri: Uri) : RingtoneSource()
-    // Note: FromUrl will be available in the future
-    // data class FromUrl(val url: String) : RingtoneSource()
+    target = RingtoneTarget.System(RingtoneType.RINGTONE)
+).onSuccess {
+    println("✅ Ringtone set successfully!")
+}.onFailure {
+    println("❌ Error: ${it.message}")
 }
 ```
 
----
-
-## Future feature: Setting ringtone from URL
-
-The `FromUrl` source will be supported in a future release:
+#### 📱 Set a contact's ringtone from device storage:
 
 ```kotlin
-// This will be available soon
-// RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
+RingtoneHelper.applyToTarget(
+    source = RingtoneSource.FromStorage(
+        Uri.parse("content://media/internal/audio/media/10")
+    ),
+    target = RingtoneTarget.Contact(ContactIdentifier.ByPhone("+1234567890"))
+)
 ```
-
-## Contributing
-
-Contributions are welcome and appreciated!  
-If you find a bug, have a feature request, or want to improve the code/documentation, feel free to:
-
-- Open an issue
-- Create a pull request
-- Suggest enhancements
-
-Please make sure your changes follow the current code style and include proper documentation or
-tests when applicable.
 
 ---
 
+## 🚀 Coming Soon
+
+Support for setting ringtones directly from remote URLs:
+
+```kotlin
+RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
+```
+
+
+
+ 
+ 
 ## Contact
 
 If you have suggestions, questions, or feedback, feel free to reach out:
@@ -224,6 +202,10 @@ the GitHub repository packages as an alternative.
 
 - 💻 **GitHub Repository**: Source code, examples, and documentation are available here:
   [https://github.com/AmjdAlhashede/RingtoneSmartKitProject](https://github.com/AmjdAlhashede/RingtoneSmartKitProject)
+
+
+💭 **Enjoy!**\
+Feel free to contribute or open issues if you have suggestions or encounter problems. Happy coding! 🎵
 
 ## License
 

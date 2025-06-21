@@ -17,14 +17,15 @@
 
 package io.github.ringtonesmartkit.api
 
-import io.github.provider.RingtoneSmartKitInitProvider
-import io.github.ringtonesmartkit.data.ringtoneresult.ContactRingtoneResultHandler
-import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResultHandler
-import io.github.ringtonesmartkit.data.ringtoneresult.SystemRingtoneResultHandler
-import io.github.ringtonesmartkit.domain.model.ContactIdentifier
-import io.github.ringtonesmartkit.domain.model.RingtoneSource
-import io.github.ringtonesmartkit.domain.model.RingtoneTarget
-import io.github.ringtonesmartkit.domain.model.RingtoneType
+import io.domain.applier.RingtoneApplyResultHandler
+import io.domain.model.ContactIdentifier
+import io.domain.model.RingtoneSource
+import io.domain.model.RingtoneTarget
+import io.domain.model.RingtoneType
+import io.domain.ringtoneresult.ContactRingtoneResultHandler
+import io.domain.ringtoneresult.SystemRingtoneResultHandler
+import io.github.ringtonesmartkit.provider.RingtoneSmartKitInitProvider
+
 
 /**
  * Helper object that provides a simplified API for setting system and contact ringtones.
@@ -61,20 +62,6 @@ object RingtoneHelper {
         contact: ContactIdentifier
     ): ContactRingtoneResultHandler {
         return ringtoneManager.setContactRingtone(source, contact)
-    }
-
-    /**
-     * Applies a ringtone to a generic target (system or contact).
-     *
-     * @param source Ringtone source.
-     * @param target Target to apply ringtone to.
-     * @return RingtoneApplyResultHandler with async callbacks.
-     */
-    fun applyToTarget(
-        source: RingtoneSource,
-        target: RingtoneTarget
-    ): RingtoneApplyResultHandler {
-        return ringtoneManager.applyToTarget(source, target)
     }
 }
 

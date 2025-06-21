@@ -15,14 +15,31 @@
  *
  */
 
-package com.studio.ringtonesmartkit.ui.theme
+package io.di
 
-import androidx.compose.ui.graphics.Color
+import android.content.Context
+import dagger.BindsInstance
+import dagger.Component
+import io.domain.repository.RingtoneManager
+import javax.inject.Singleton
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+@Singleton
+@Component(
+    modules = [
+        RingtoneModule::class,
+        RingtoneSourcesModule::class,
+    ]
+)
+interface RingtoneSmartKitComponent{
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+    fun provideRingtoneManager(): RingtoneManager
+
+    @Component.Builder
+    interface Builder {
+
+        @BindsInstance
+        fun context(context: Context): Builder
+
+        fun build(): RingtoneSmartKitComponent
+    }
+}

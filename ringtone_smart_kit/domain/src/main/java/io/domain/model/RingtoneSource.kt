@@ -15,14 +15,22 @@
  *
  */
 
-package com.studio.ringtonesmartkit.ui.theme
+package io.domain.model
 
-import androidx.compose.ui.graphics.Color
+import android.net.Uri
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+sealed class RingtoneSource {
+
+    data class FromAssets(val filePath: String,val outputDirPath: String="") : RingtoneSource()
+
+    data class FromStorage(val uri: Uri) : RingtoneSource()
+
+//    data class FromUrl(val url: String) : RingtoneSource()
+
+    override fun toString(): String = when (this) {
+        is FromAssets -> "Assets($filePath)"
+        is FromStorage -> "Storage(${uri.lastPathSegment})"
+//        is FromUrl -> "Url($url)"
+    }
+}

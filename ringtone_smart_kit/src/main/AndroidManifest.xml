@@ -2,20 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-
-
-        <provider
-            android:name="io.github.provider.RingtoneSmartKitInitProvider"
+            android:name="io.github.ringtonesmartkit.provider.RingtoneSmartKitInitProvider"
             android:authorities="${applicationId}.ringtone_smart_kit_init_provider"
             android:exported="false" />
     </application>
