@@ -111,8 +111,7 @@ You can load ringtones from different types of sources:
 
 ```kotlin
 // From the app's assets directory:
-RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3")
-or RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3", outputDirPath = filesDir.path)
+RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3") or RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3", outputDirPath = filesDir.path)
  
 
 // From device storage:
