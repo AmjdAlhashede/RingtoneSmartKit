@@ -33,11 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.studio.ringtonesmartkit.ui.theme.RingtoneSmartKitTheme
-import io.domain.model.ContactIdentifier
-import io.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.api.RingtoneHelper
+import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.domain.model.RingtoneSource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +45,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RingtoneSmartKitTheme {
                 fun tryApplyRingtone() {
-
-
-                    RingtoneHelper.setSystemRingtone(source = RingtoneSource.FromAssets(filePath = "ringtone_name.mp3"))
+                    RingtoneHelper.setSystemRingtone(source = RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3"))
                         .onSuccess {
                             runOnUiThread {
                                 Toast.makeText(
@@ -87,6 +84,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(
                         modifier = Modifier

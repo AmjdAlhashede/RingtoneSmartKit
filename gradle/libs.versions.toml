@@ -1,6 +1,6 @@
 [versions]
-agp = "8.9.3"
-kotlin = "2.1.20"
+agp = "8.10.1"
+kotlin = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -10,10 +10,7 @@ activityCompose = "1.10.1"
 composeBom = "2025.06.01"
 appcompat = "1.7.1"
 material = "1.12.0"
-koin-version = "4.0.4"
-lifecycleViewmodelKtx = "2.9.1"
-vanniktechPluginVersion = "0.30.0"
-dagger2Version="2.56.2"
+dagger2Version = "2.56.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,15 +30,6 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
-#koin
-koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-version" }
-koin-core = { module = "io.insert-koin:koin-core" }
-koin-android = { module = "io.insert-koin:koin-android" }
-
-
-androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
-
-
 #dagger2
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger2Version" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger2Version" }
@@ -52,15 +40,10 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-vanniktech-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechPluginVersion" }
-
+android-fusedlibrary = { id = "com.android.fused-library", version.ref = "agp" }
 
 [bundles]
-koin = [
-    "koin-core",
-    "koin-android"
-]
 
-dagger-bundle=[
+dagger-bundle = [
     "dagger"
 ]

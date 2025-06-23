@@ -17,13 +17,11 @@
 
 package io.github.ringtonesmartkit.api
 
-import io.domain.applier.RingtoneApplyResultHandler
-import io.domain.model.ContactIdentifier
-import io.domain.model.RingtoneSource
-import io.domain.model.RingtoneTarget
-import io.domain.model.RingtoneType
-import io.domain.ringtoneresult.ContactRingtoneResultHandler
-import io.domain.ringtoneresult.SystemRingtoneResultHandler
+import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.domain.model.RingtoneSource
+import io.github.ringtonesmartkit.domain.model.RingtoneType
+import io.github.ringtonesmartkit.domain.ringtoneresult.ContactRingtoneResultHandler
+import io.github.ringtonesmartkit.domain.ringtoneresult.SystemRingtoneResultHandler
 import io.github.ringtonesmartkit.provider.RingtoneSmartKitInitProvider
 
 

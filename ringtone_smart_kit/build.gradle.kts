@@ -7,7 +7,8 @@ plugins {
 }
 
 group = "io.github.amjdalhashede"
-version = "1.0.3-beta"
+version = "1.0.3"
+
 
 android {
     namespace = "io.github.amjdalhashede"
@@ -15,10 +16,6 @@ android {
 
     defaultConfig {
         minSdk = 22
-
-        aarMetadata {
-            minCompileSdk = 22
-        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -39,19 +36,16 @@ android {
             )
         }
     }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
-    implementation(project(":ringtone_smart_kit:di"))
-    api(project(":ringtone_smart_kit:domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
@@ -69,7 +63,7 @@ afterEvaluate {
 
                 groupId = "io.github.amjdalhashede"
                 artifactId = "ringtone-smart-kit"
-                version = "1.0.3-beta"
+                version = "1.0.3"
 
                 pom {
                     name.set("Ringtone Smart Kit")
@@ -133,13 +127,11 @@ afterEvaluate {
     }
 }
 
-
 tasks.register<Zip>("generateRepoZip") {
     dependsOn("publishReleasePublicationToMyrepoRepository")
 
     from(layout.buildDirectory.dir("repo"))
 
-    archiveFileName.set("ringtone_smart_kit-1.0.3-beta.zip")
+    archiveFileName.set("ringtone_smart_kit-1.0.3.zip")
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }
-

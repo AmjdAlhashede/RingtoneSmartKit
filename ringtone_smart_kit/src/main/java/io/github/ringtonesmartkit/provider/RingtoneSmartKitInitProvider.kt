@@ -22,9 +22,9 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
-import io.di.DaggerRingtoneSmartKitComponent
-import io.di.RingtoneSmartKitComponent
-import io.domain.contact.ActivityTracker
+import io.github.ringtonesmartkit.di.DaggerRingtoneSmartKitComponent
+import io.github.ringtonesmartkit.di.RingtoneSmartKitComponent
+import io.github.ringtonesmartkit.domain.contact.ActivityTracker
 
 class RingtoneSmartKitInitProvider : ContentProvider() {
 
