@@ -186,11 +186,11 @@ This library is available via:
 
 📦 [Maven Central](https://central.sonatype.com/artifact/io.github.amjdalhashede/ringtone-smart-kit):
 Easy integration using Gradle/Maven.  
-🐙 [GitHub Packages](https://github.com/AmjdAlhashede/RingtoneSmartKitProject/packages): Published to
+🐙 [GitHub Packages](https://github.com/AmjdAlhashede/RingtoneSmartKit/packages): Published to
 the GitHub repository packages as an alternative.
 
 - 💻 **GitHub Repository**: Source code, examples, and documentation are available here:
-  [https://github.com/AmjdAlhashede/RingtoneSmartKitProject](https://github.com/AmjdAlhashede/RingtoneSmartKitProject)
+  [https://github.com/AmjdAlhashede/RingtoneSmartKit](https://github.com/AmjdAlhashede/RingtoneSmartKit)
 
 
 💭 **Enjoy!**\
