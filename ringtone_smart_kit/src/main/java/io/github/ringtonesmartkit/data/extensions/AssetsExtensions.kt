@@ -17,25 +17,49 @@
 
 package io.github.ringtonesmartkit.data.extensions
 
+import android.content.ContentResolver
 import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
 import java.io.InputStream
 
 
-const val ASSETS_DIRECTORY = "assets"
 const val ASSETS_PATH_SEPARATOR = "/"
-const val ASSETS_URI_DIR = "file:///android_assets"
+const val ASSET_PATH_SCHEMA = "android_assets"
+const val ASSETS_URI_SCHEMA = "file:///android_assets"
+const val ASSETS_SCHEMA = "assets"
 
 internal fun getAssetsPathSaverToDealWithClassLoader(path: String): String {
     return when {
-        path.startsWith(ASSETS_URI_DIR) ->
-            path.replace(ASSETS_URI_DIR, ASSETS_DIRECTORY)
-        path.startsWith(ASSETS_DIRECTORY) ->
-            path
-        else ->
-            "$ASSETS_DIRECTORY$ASSETS_PATH_SEPARATOR$path"
+        path.startsWith(ASSETS_URI_SCHEMA) -> path.replace(ASSETS_URI_SCHEMA, ASSETS_SCHEMA)
+        path.startsWith(ASSET_PATH_SCHEMA) -> path.replace(ASSET_PATH_SCHEMA, ASSETS_SCHEMA)
+        path.startsWith(ASSETS_SCHEMA) -> path
+        else -> "$ASSETS_SCHEMA$ASSETS_PATH_SEPARATOR$path"
     }
 }
 
+internal fun extractPathFromAssetUri(uri: String): String {
+    val cleaned = when {
+        uri.startsWith(ASSETS_URI_SCHEMA) -> uri.removePrefix(ASSETS_URI_SCHEMA)
+        uri.startsWith(ASSET_PATH_SCHEMA) -> uri.removePrefix(ASSET_PATH_SCHEMA)
+        uri.startsWith(ASSETS_SCHEMA + ASSETS_PATH_SEPARATOR) ->
+            uri.removePrefix(ASSETS_SCHEMA + ASSETS_PATH_SEPARATOR)
+        else -> uri
+    }
+    return cleaned.removePrefix(ASSETS_PATH_SEPARATOR)
+}
+
 internal fun Context.extractInputStreamFromAssets(path: String): InputStream? {
-    return classLoader.getResourceAsStream(getAssetsPathSaverToDealWithClassLoader(path))
+//    return classLoader.getResourceAsStream(getAssetsPathSaverToDealWithClassLoader(path))
+    return runCatching {
+        assets.open(extractPathFromAssetUri(path))
+    }.getOrNull()
+}
+
+internal fun String.toAssetUri(): Uri {
+    return "file:///android_assets/$this".toUri()
+}
+
+internal fun String.isThisAssetsUri(): Boolean {
+    return this.startsWith(ASSETS_URI_SCHEMA) or this.startsWith(ASSETS_SCHEMA)
 }

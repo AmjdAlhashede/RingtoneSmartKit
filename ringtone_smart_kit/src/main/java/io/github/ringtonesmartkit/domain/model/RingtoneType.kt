@@ -17,6 +17,18 @@
 
 package io.github.ringtonesmartkit.domain.model
 
+import android.os.Environment
+
 enum class RingtoneType {
-    CALL, NOTIFICATION, ALARM
+    CALL, NOTIFICATION, ALARM;
+
+    fun getDirectoryName(): String = when (this) {
+        CALL -> Environment.DIRECTORY_RINGTONES
+        NOTIFICATION -> Environment.DIRECTORY_NOTIFICATIONS
+        ALARM -> Environment.DIRECTORY_ALARMS
+    }
+
+    fun isForCall() = this == CALL
+    fun isForNotification() = this == NOTIFICATION
+    fun isForAlarm() = this == ALARM
 }

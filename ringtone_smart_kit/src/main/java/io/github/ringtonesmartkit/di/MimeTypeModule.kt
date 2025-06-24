@@ -15,19 +15,18 @@
  *
  */
 
-package io.github.ringtonesmartkit.data.extensions
+package io.github.ringtonesmartkit.di
 
-import android.net.Uri
+import dagger.Binds
+import dagger.Module
+import io.github.ringtonesmartkit.data.strategy.mimetype.DefaultMimeTypeExtractor
+import io.github.ringtonesmartkit.domain.strategy.mimetype.MimeTypeExtractor
 
-internal val String.nameWithoutExtension: String
-    get() = substringBeforeLast(".")
+@Module
+abstract class MimeTypeModule {
 
-internal val String.extension: String
-    get() = substringAfterLast('.', "")
-
-internal val String.nameOfPath: String
-    get() = substringAfterLast("/")
-
-internal val String.titleOfPath: String
-    get() = nameOfPath.nameWithoutExtension
-
+    @Binds
+    abstract fun bindMimeTypeExtractor(
+        impl: DefaultMimeTypeExtractor
+    ): MimeTypeExtractor
+}

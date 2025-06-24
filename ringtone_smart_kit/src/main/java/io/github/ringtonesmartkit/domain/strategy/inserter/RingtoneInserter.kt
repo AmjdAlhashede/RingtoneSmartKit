@@ -15,19 +15,16 @@
  *
  */
 
-package io.github.ringtonesmartkit.data.extensions
+package io.github.ringtonesmartkit.domain.strategy.inserter
 
 import android.net.Uri
+import io.github.ringtonesmartkit.domain.model.RingtoneData
+import io.github.ringtonesmartkit.domain.model.RingtoneType
 
-internal val String.nameWithoutExtension: String
-    get() = substringBeforeLast(".")
-
-internal val String.extension: String
-    get() = substringAfterLast('.', "")
-
-internal val String.nameOfPath: String
-    get() = substringAfterLast("/")
-
-internal val String.titleOfPath: String
-    get() = nameOfPath.nameWithoutExtension
-
+interface RingtoneInserter {
+    @Throws(IllegalStateException::class)
+    fun insert(
+        ringtone: RingtoneData,
+        ringtoneType : RingtoneType
+    ): Uri
+}

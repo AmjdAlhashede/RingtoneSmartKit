@@ -22,13 +22,10 @@ import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import io.github.ringtonesmartkit.data.contract.pickContact
 import io.github.ringtonesmartkit.domain.model.ContactIdentifier
 import io.github.ringtonesmartkit.domain.model.ContactInfo
-
-internal fun Context.getMimeType(uri: Uri): String? {
-    return contentResolver.getType(uri)
-}
 
 
 internal fun ContentValues.finalizePending(context: Context, uri: Uri) {
@@ -83,7 +80,7 @@ internal suspend fun getContactInfoFromIdentifier(
 
 
 @Throws(IllegalArgumentException::class)
-internal suspend fun getContactInfoFromUri(context: Context, contactUri: Uri): ContactInfo? {
+internal fun getContactInfoFromUri(context: Context, contactUri: Uri): ContactInfo? {
     val contentResolver = context.contentResolver
 
 

@@ -20,26 +20,24 @@ package io.github.ringtonesmartkit.data.applier
 import android.content.ContentValues
 import android.content.Context
 import android.media.RingtoneManager
-import android.net.Uri
 import android.provider.ContactsContract
-import android.provider.MediaStore
-import io.github.ringtonesmartkit.data.extensions.ExternalAudioUri
-import io.github.ringtonesmartkit.data.extensions.finalizePending
 import io.github.ringtonesmartkit.data.extensions.getContactInfoFromIdentifier
-import io.github.ringtonesmartkit.data.extensions.getMimeType
 import io.github.ringtonesmartkit.domain.applier.RingtoneAssetsApplier
+import io.github.ringtonesmartkit.domain.strategy.inserter.RingtoneInserter
 import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
+import io.github.ringtonesmartkit.domain.model.RingtoneType
+import io.github.ringtonesmartkit.mapper.toRingtoneType
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RingtoneAssetsApplierImpl @Inject constructor(
     private val context: Context,
+    private val ringtoneInserter: RingtoneInserter
 ) : RingtoneAssetsApplier {
-
 
 
     @Throws(IllegalArgumentException::class)
@@ -49,12 +47,11 @@ class RingtoneAssetsApplierImpl @Inject constructor(
         source: RingtoneSource,
     ) {
 
-        val insertedUri = insertRingtoneToMediaStore(
+        val insertedUri =ringtoneInserter.insert(
             ringtone = ringtone,
-            isForCall = target is RingtoneTarget.System.Call,
-            isForNotification = target is RingtoneTarget.System.Notification,
-            isForAlarm = target is RingtoneTarget.System.Alarm
+            ringtoneType = target.toRingtoneType()
         )
+
 
         when (target) {
             is RingtoneTarget.System.Call -> RingtoneManager.setActualDefaultRingtoneUri(
@@ -78,7 +75,11 @@ class RingtoneAssetsApplierImpl @Inject constructor(
         ringtone: RingtoneData,
         source: RingtoneSource,
     ): ContactInfo? {
-        val insertedUri = insertRingtoneToMediaStore(ringtone = ringtone, isForCall = true)
+        val insertedUri =ringtoneInserter.insert(
+            ringtone = ringtone,
+            ringtoneType = RingtoneType.CALL
+        )
+
         return when (
             target
         ) {
@@ -106,39 +107,4 @@ class RingtoneAssetsApplierImpl @Inject constructor(
             }
         }
     }
-
-    @Throws(IllegalStateException::class)
-    private fun insertRingtoneToMediaStore(
-        ringtone: RingtoneData,
-        isForCall: Boolean = true,
-        isForNotification: Boolean = false,
-        isForAlarm: Boolean = false,
-    ): Uri {
-        val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, ringtone.title)
-            put(
-                MediaStore.MediaColumns.MIME_TYPE,
-                context.getMimeType(ringtone.contentUri) ?: "audio/*"
-            )
-            put(MediaStore.Audio.Media.IS_RINGTONE, isForCall)
-            put(MediaStore.Audio.Media.IS_NOTIFICATION, isForNotification)
-            put(MediaStore.Audio.Media.IS_ALARM, isForAlarm)
-            put(MediaStore.Audio.Media.IS_PENDING, 1)
-        }
-
-        val contentResolver = context.contentResolver
-
-        val insertedUri = contentResolver.insert(ExternalAudioUri, values)
-            ?: throw IllegalStateException("Unable to insert into MediaStore")
-
-        contentResolver.openOutputStream(insertedUri)?.use { outStream ->
-            contentResolver.openInputStream(ringtone.contentUri)?.copyTo(outStream)
-        }
-
-        values.finalizePending(context = context, uri = insertedUri)
-
-        return insertedUri
-    }
-
-
 }

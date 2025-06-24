@@ -15,19 +15,13 @@
  *
  */
 
-package io.github.ringtonesmartkit.data.extensions
+package io.github.ringtonesmartkit.domain.strategy.inserter
 
-import android.net.Uri
+import io.github.ringtonesmartkit.domain.model.RingtoneData
+import java.io.IOException
+import java.io.InputStream
 
-internal val String.nameWithoutExtension: String
-    get() = substringBeforeLast(".")
-
-internal val String.extension: String
-    get() = substringAfterLast('.', "")
-
-internal val String.nameOfPath: String
-    get() = substringAfterLast("/")
-
-internal val String.titleOfPath: String
-    get() = nameOfPath.nameWithoutExtension
-
+interface RingtoneInputStreamProvider {
+    @Throws(IOException::class)
+    fun openInputStream(ringtone: RingtoneData): InputStream
+}

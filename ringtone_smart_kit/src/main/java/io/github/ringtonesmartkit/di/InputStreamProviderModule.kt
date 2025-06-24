@@ -17,32 +17,17 @@
 
 package io.github.ringtonesmartkit.di
 
-import android.content.Context
-import dagger.BindsInstance
-import dagger.Component
-import io.github.ringtonesmartkit.domain.repository.RingtoneManager
+import dagger.Binds
+import dagger.Module
+import io.github.ringtonesmartkit.data.strategy.inserter_provider.DefaultRingtoneInputStreamProvider
+import io.github.ringtonesmartkit.domain.strategy.inserter.RingtoneInputStreamProvider
 import javax.inject.Singleton
 
-@Singleton
-@Component(
-    modules = [
-        RingtoneModule::class,
-        RingtoneSourcesModule::class,
-        InputStreamModule::class,
-        RingtoneInserterModule::class,
-        MimeTypeModule::class
-    ]
-)
-interface RingtoneSmartKitComponent {
-
-    fun provideRingtoneManager(): RingtoneManager
-
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun context(context: Context): Builder
-
-        fun build(): RingtoneSmartKitComponent
-    }
+@Module
+abstract class InputStreamModule {
+    @Binds
+    @Singleton
+    abstract fun bindRingtoneInputStreamProvider(
+        impl: DefaultRingtoneInputStreamProvider
+    ): RingtoneInputStreamProvider
 }

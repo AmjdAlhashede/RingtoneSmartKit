@@ -19,20 +19,17 @@ package io.github.ringtonesmartkit.data.source
 
 import android.content.ContentUris
 import android.content.Context
-import android.net.Uri
 import android.provider.MediaStore
 import io.github.ringtonesmartkit.data.extensions.ExternalAudioUri
-import io.github.ringtonesmartkit.data.extensions.extractInputStreamFromAssets
 import io.github.ringtonesmartkit.data.extensions.nameOfPath
 import io.github.ringtonesmartkit.data.extensions.titleOfPath
+import io.github.ringtonesmartkit.data.extensions.toAssetUri
 import io.github.ringtonesmartkit.domain.applier.RingtoneAssetsApplier
 import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneData
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.domain.repository.RingtoneDataSource
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 class AssetRingtoneDataSource @Inject constructor(
@@ -52,21 +49,31 @@ class AssetRingtoneDataSource @Inject constructor(
     override suspend fun findExistingRingtoneUri(source: RingtoneSource): RingtoneData? {
         source as? RingtoneSource.FromAssets
             ?: throw IllegalArgumentException("this is not from assets source")
-        val projection = arrayOf(MediaStore.Audio.Media._ID)
-        val selection = "${MediaStore.Audio.Media.DISPLAY_NAME} = ?"
-
-        val selectionArgs = arrayOf(source.filePath)
+        val filename = source.filePath.nameOfPath
+        val projection = arrayOf(MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DISPLAY_NAME)
+        val selection = "${MediaStore.MediaColumns.DATA} LIKE ?"
+        val selectionArgs = arrayOf("%$filename")
 
         context.contentResolver.query(
             ExternalAudioUri,
-            projection, selection, selectionArgs, null
+            projection,
+            selection,
+            selectionArgs,
+            null
         )?.use { cursor ->
             if (cursor.moveToFirst()) {
-                val id = cursor.getLong(0)
-                ContentUris.withAppendedId(ExternalAudioUri, id)
-            } else null
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                val displayName =
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
+                return RingtoneData(
+                    contentUri = ContentUris.withAppendedId(
+                        ExternalAudioUri,
+                        id
+                    ),
+                    title = displayName
+                )
+            }
         }
-
         return null
     }
 
@@ -76,17 +83,11 @@ class AssetRingtoneDataSource @Inject constructor(
             ?: throw IllegalArgumentException("Invalid source for AssetRingtoneDataSource")
 
         val filePath = assetSource.filePath
-        val inputStream = context.extractInputStreamFromAssets(filePath) ?: throw IllegalArgumentException("Invalid ringtone Maybe Not Found In Assets")
-        val outputDir =assetSource.outputDirPath.ifEmpty { context.cacheDir.path }
 
-        val outFile = File(outputDir, filePath.nameOfPath)
-
-
-        FileOutputStream(outFile).use { output ->
-            inputStream.copyTo(output)
-        }
-
-        return RingtoneData(contentUri = Uri.fromFile(outFile), title = filePath.titleOfPath)
+        return RingtoneData(
+            contentUri = filePath.toAssetUri(),
+            title = filePath.titleOfPath
+        )
     }
 
     override suspend fun applyRingtones(

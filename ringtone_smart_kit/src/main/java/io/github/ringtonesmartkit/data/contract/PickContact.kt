@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.ContactsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.net.toUri
@@ -30,7 +31,7 @@ import kotlinx.coroutines.CompletableDeferred
 internal class PickContacts : ActivityResultContract<Unit, Uri?>() {
     override fun createIntent(context: Context, input: Unit): Intent {
         return Intent(Intent.ACTION_PICK).apply {
-            data = "vnd.android.cursor.dir/contact".toUri()
+            type = ContactsContract.Contacts.CONTENT_TYPE
         }
     }
 

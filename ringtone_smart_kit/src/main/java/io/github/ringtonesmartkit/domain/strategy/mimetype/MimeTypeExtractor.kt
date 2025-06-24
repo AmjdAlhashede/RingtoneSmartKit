@@ -15,19 +15,8 @@
  *
  */
 
-package io.github.ringtonesmartkit.data.extensions
+package io.github.ringtonesmartkit.domain.strategy.mimetype
 
-import android.net.Uri
-
-internal val String.nameWithoutExtension: String
-    get() = substringBeforeLast(".")
-
-internal val String.extension: String
-    get() = substringAfterLast('.', "")
-
-internal val String.nameOfPath: String
-    get() = substringAfterLast("/")
-
-internal val String.titleOfPath: String
-    get() = nameOfPath.nameWithoutExtension
-
+interface MimeTypeExtractor {
+    fun getMimeType(uri: String): String
+}

@@ -19,15 +19,8 @@ package io.github.ringtonesmartkit.data.extensions
 
 import android.net.Uri
 
-internal val String.nameWithoutExtension: String
-    get() = substringBeforeLast(".")
+internal val Uri.nameOfUri : String
+    get() = lastPathSegment?.nameOfPath ?: throw IllegalArgumentException("Invalid URI: $this")
 
-internal val String.extension: String
-    get() = substringAfterLast('.', "")
-
-internal val String.nameOfPath: String
-    get() = substringAfterLast("/")
-
-internal val String.titleOfPath: String
-    get() = nameOfPath.nameWithoutExtension
-
+internal val Uri.titleOfUri: String
+    get() = lastPathSegment?.titleOfPath ?:  throw IllegalArgumentException("Invalid URI: $this")

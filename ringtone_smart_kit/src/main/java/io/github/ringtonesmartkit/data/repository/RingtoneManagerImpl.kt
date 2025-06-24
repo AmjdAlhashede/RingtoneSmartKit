@@ -32,6 +32,7 @@ import io.github.ringtonesmartkit.domain.ringtoneresult.SystemRingtoneResultHand
 import io.github.ringtonesmartkit.domain.usecase.ApplyContactRingtoneUseCase
 import io.github.ringtonesmartkit.domain.usecase.ApplyRingtoneUseCase
 import io.github.ringtonesmartkit.domain.usecase.LoadRingtoneUseCase
+import io.github.ringtonesmartkit.mapper.toSystemTarget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -51,8 +52,7 @@ class RingtoneManagerImpl @Inject constructor(
         source: RingtoneSource,
         type: RingtoneType,
     ): SystemRingtoneResultHandler {
-        val target = mapSystemTypeToTarget(type)
-        return applyToTarget(source, target) as SystemRingtoneResultHandler
+        return applyToTarget(source, type.toSystemTarget()) as SystemRingtoneResultHandler
     }
 
 
@@ -115,11 +115,5 @@ class RingtoneManagerImpl @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun mapSystemTypeToTarget(type: RingtoneType): RingtoneTarget.System = when (type) {
-        RingtoneType.CALL -> RingtoneTarget.System.Call
-        RingtoneType.NOTIFICATION -> RingtoneTarget.System.Notification
-        RingtoneType.ALARM -> RingtoneTarget.System.Alarm
     }
 }
