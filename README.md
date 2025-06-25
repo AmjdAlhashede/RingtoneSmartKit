@@ -1,12 +1,10 @@
 ![Cover Image](docs/assets/ringtone_smart_kit_cover_image.png)
-# RingtoneSmartKit
+# Android Set Ringtone - Kotlin Library
 
-A Kotlin library for easy ringtone management on Android, supporting multiple ringtone sources and
-providing a simplified API that does not require passing Context or Activity.
+Easily set and customize ringtones, notification sounds, and alarms programmatically on Android using Kotlin.  
+Supports setting ringtones globally or per contact from assets or local files (URIs) — all without boilerplate code.
 
-**Easily customize and set ringtones, notification sounds, and alarms programmatically in Kotlin.  
-Supports setting custom ringtones for all contacts or specific ones using assets or local storage URIs.  
-Perfect for Android developers looking for a reliable ringtone manager and ringtone setter library written fully in Kotlin.**
+Perfect for Android developers who need a simple, flexible ringtone manager and setter library written entirely in Kotlin.
 
 ## Features
 
