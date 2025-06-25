@@ -4,6 +4,10 @@
 A Kotlin library for easy ringtone management on Android, supporting multiple ringtone sources and
 providing a simplified API that does not require passing Context or Activity.
 
+**Easily customize and set ringtones, notification sounds, and alarms programmatically in Kotlin.  
+Supports setting custom ringtones for all contacts or specific ones using assets or local storage URIs.  
+Perfect for Android developers looking for a reliable ringtone manager and ringtone setter library written fully in Kotlin.**
+
 ## Features
 
 - Simplified API for setting system and contact ringtones without needing to pass Context or
