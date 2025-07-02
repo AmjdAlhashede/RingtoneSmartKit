@@ -15,15 +15,11 @@
  *
  */
 
-package io.github.ringtonesmartkit.domain.applier
+package com.studio.composedemo.util.extensions
 
+import android.content.Context
+import android.widget.Toast
 
-
-interface RingtoneApplyResult
-
-interface RingtoneApplyResultHandler {
-    fun invokeSuccess(result: RingtoneApplyResult)
-    fun invokeFailure(throwable: Throwable)
-    fun invokeDone()
+fun Context.showToast(message: String){
+    Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
 }
-
