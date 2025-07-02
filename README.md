@@ -1,6 +1,9 @@
 ![Cover Image](docs/assets/ringtone_smart_kit_cover_image.png)
 # Android Set Ringtone - Kotlin Library
 
+![API Level](https://img.shields.io/badge/API_Level-22%2B-blue.svg?style=flat-square)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.amjdalhashede/ringtone-smart-kit?style=flat-square&label=latest%20version&color=blue)
+
 Easily set and customize ringtones, notification sounds, and alarms programmatically on Android using Kotlin.  
 Supports setting ringtones globally or per contact from assets or local files (URIs) — all without boilerplate code.
 
