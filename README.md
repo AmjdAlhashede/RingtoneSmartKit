@@ -24,13 +24,13 @@ Add the following dependency to your `build.gradle` or `build.gradle.kts` file:
 ### Gradle Groovy (build.gradle)
 
 ```groovy
-implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.4"
+implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.5"
 ```
 
 ### Gradle Kotlin DSL (build.gradle.kts)
 
 ```kotlin
-implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.4")
+implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.5")
 ```
 
 ## Required Permissions
@@ -64,7 +64,7 @@ implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.4")
 ```xml
  <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
-
+![img.png](img.png)
 
 ## 🎯 Usage
 
@@ -75,15 +75,16 @@ Use one of these methods to set ringtones:
 
 ```kotlin
 RingtoneHelper.setSystemRingtone(
-    source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3"),
-    type = RingtoneType.RINGTONE // or ALARM, NOTIFICATION
+  source = RingtoneSource.FromAssets("ringtones/my_ringtone.mp3"),
+  target = SystemTarget.Call // or Notification, Alarm
 ).onSuccess {
-    println("✅ System ringtone set successfully")
+  println("✅ System ringtone set successfully")
 }.onFailure { error ->
-    println("❌ Error setting system ringtone: ${error.message}")
+  println("❌ Error setting system ringtone: ${error.message}")
 }.onDone {
-    println("Operation completed")
-}
+  println("Operation completed")
+}.launch()
+
 ```
 
 > ℹ️ **Important:** `onSuccess` for system ringtones is `onSuccess { }` — it takes no arguments.
@@ -92,15 +93,16 @@ RingtoneHelper.setSystemRingtone(
 
 ```kotlin
 RingtoneHelper.setContactRingtone(
-    source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audio/media/10")),
-    contact = ContactIdentifier.ByPhone("+1234567890")
-).onSuccess { contactInfo ->
-    println("✅ Ringtone set for contact: ${contactInfo.displayName}")
+  source = RingtoneSource.FromStorage(Uri.parse("content://media/internal/audio/media/10")),
+  target = ContactTarget.ByPhone("+1234567890")
+).onSuccess { contact ->
+  println("✅ Ringtone set for contact: ${contact.displayName}")
 }.onFailure { error ->
-    println("❌ Error setting contact ringtone: ${error.message}")
+  println("❌ Error setting contact ringtone: ${error.message}")
 }.onDone {
-    println("Operation completed")
-}
+  println("Operation completed")
+}.launch()
+
 ```
 
 > ℹ️ **Important:** `onSuccess(block: (ContactInfo) -> Unit)` returns contact details for contact ringtones only.
@@ -113,14 +115,11 @@ You can load ringtones from different types of sources:
 
 ```kotlin
 // From the app's assets directory:
-RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3") or RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3", outputDirPath = filesDir.path)
- 
+RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3")   
 
 // From device storage:
-RingtoneSource.FromStorage(uri = Uri.parse("content://media/internal/audio/media/10"))
-
-// Coming soon — From a remote URL:
-RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
+RingtoneSource.FromStorage(uri = "content://media/internal/audio/media/10".toUri()))
+ 
 ```
 
 > ⚠️ **About asset file paths** You can use any of these path styles for assets:
@@ -135,22 +134,23 @@ RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
 
 ---
 
-## 🎧 RingtoneTarget
+## 🎷 RingtoneTarget
 
-You can target the contacts :
+### For system ringtones:
 
-```kotlin 
-// A specific contact by URI:
-ContactIdentifier.ByUri(contactUri)
+```kotlin
+SystemTarget.Call
+SystemTarget.Notification
+SystemTarget.Alarm
+```
 
-// A specific contact by ID:
-ContactIdentifier.ById(42L)
+### For contact ringtones:
 
-// A specific contact by phone number:
-ContactIdentifier.ByPhone("+1234567890")
-
-// Interactive contact picker (select contact at runtime):
-ContactIdentifier.Interactive
+```kotlin
+ContactTarget.Interactive
+ContactTarget.ByPhone("+1234567890")
+ContactTarget.ById(42L)
+ContactTarget.ByUri(contactUri)
 ```
 
 ---
@@ -165,14 +165,24 @@ ContactIdentifier.Interactive
 
 ---
 
-## 🚀 Coming Soon
 
-Support for setting ringtones directly from remote URLs:
 
-```kotlin
-RingtoneSource.FromUrl("https://example.com/ringtone.mp3")
-```
- 
+## 🧪 Example Projects
+
+
+All examples are available in the main repository under the `examples/` folder:
+
+| Example Style   | Path                                                                 | Clone One Example                                                                                                                                                                |
+| --------------- | -------------------------------------------------------------------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Jetpack Compose | `examples/compose-example`                                           | `git clone --depth=1 --filter=blob:none --sparse https://github.com/AmjdAlhashede/RingtoneSmartKit.git && cd RingtoneSmartKit && git sparse-checkout set examples/ComposeDemo`   |
+| Kotlin XML      | `examples/kotlin-xml-example`                                        | `git clone --depth=1 --filter=blob:none --sparse https://github.com/AmjdAlhashede/RingtoneSmartKit.git && cd RingtoneSmartKit && git sparse-checkout set examples/KotlinXmlDemo` |
+| Java XML        | `examples/java-xml-example`                                          | `git clone --depth=1 --filter=blob:none --sparse https://github.com/AmjdAlhashede/RingtoneSmartKit.git && cd RingtoneSmartKit && git sparse-checkout set examples/JavaDemo`      |
+
+> 💡 Each example is a full, standalone Android Studio module you can open and run directly.
+
+
+
+  
  
 ## Contact
 
