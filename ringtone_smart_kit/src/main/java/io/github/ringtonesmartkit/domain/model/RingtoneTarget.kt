@@ -20,7 +20,7 @@ package io.github.ringtonesmartkit.domain.model
 import android.net.Uri
 import android.os.Environment
 
-sealed interface RingtoneTarget {
+internal sealed interface RingtoneTarget {
     fun getDirectoryName(): String = when (this) {
         SystemTarget.Call -> Environment.DIRECTORY_RINGTONES
         SystemTarget.Notification -> Environment.DIRECTORY_NOTIFICATIONS
@@ -33,7 +33,6 @@ sealed interface RingtoneTarget {
     fun isForAlarm() = this == SystemTarget.Alarm
 }
 
-
 sealed class SystemTarget : RingtoneTarget {
 
     object Call : SystemTarget()
@@ -43,7 +42,6 @@ sealed class SystemTarget : RingtoneTarget {
     object Alarm : SystemTarget()
 
 }
-
 
 sealed class ContactTarget : RingtoneTarget {
     data class ByUri(val contactUri: Uri) : ContactTarget()

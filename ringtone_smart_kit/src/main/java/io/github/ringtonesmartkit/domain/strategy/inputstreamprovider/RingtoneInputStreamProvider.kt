@@ -22,7 +22,7 @@ import io.github.ringtonesmartkit.domain.types.RingtoneInputType
 import java.io.IOException
 import java.io.InputStream
 
-interface RingtoneInputStreamProvider {
+internal interface RingtoneInputStreamProvider {
     val type: RingtoneInputType
 
     @Throws(IOException::class)

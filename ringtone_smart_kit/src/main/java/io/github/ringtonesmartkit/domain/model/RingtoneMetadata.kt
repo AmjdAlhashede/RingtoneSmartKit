@@ -19,7 +19,7 @@ package io.github.ringtonesmartkit.domain.model
 
 import android.net.Uri
 
-data class RingtoneMetadata(
+internal data class RingtoneMetadata(
     val contentUri: Uri,
     val title: String = ""
 )
