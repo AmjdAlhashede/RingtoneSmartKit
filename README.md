@@ -64,11 +64,9 @@ implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.5")
 ```xml
  <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
-![img.png](img.png)
 
 ## 🎯 Usage
-
-
+ 
 Use one of these methods to set ringtones:
 
 ### 🎧 Set a system ringtone
@@ -164,25 +162,6 @@ ContactTarget.ByUri(contactUri)
 | `onDone`    | Operation finishes (either success or failure).                                                                       |
 
 ---
-
-
-
-## 🧪 Example Projects
-
-
-All examples are available in the main repository under the `examples/` folder:
-
-| Example Style   | Path                                                                 | Clone One Example                                                                                                                                                                |
-| --------------- | -------------------------------------------------------------------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Jetpack Compose | `examples/compose-example`                                           | `git clone --depth=1 --filter=blob:none --sparse https://github.com/AmjdAlhashede/RingtoneSmartKit.git && cd RingtoneSmartKit && git sparse-checkout set examples/ComposeDemo`   |
-| Kotlin XML      | `examples/kotlin-xml-example`                                        | `git clone --depth=1 --filter=blob:none --sparse https://github.com/AmjdAlhashede/RingtoneSmartKit.git && cd RingtoneSmartKit && git sparse-checkout set examples/KotlinXmlDemo` |
-| Java XML        | `examples/java-xml-example`                                          | `git clone --depth=1 --filter=blob:none --sparse https://github.com/AmjdAlhashede/RingtoneSmartKit.git && cd RingtoneSmartKit && git sparse-checkout set examples/JavaDemo`      |
-
-> 💡 Each example is a full, standalone Android Studio module you can open and run directly.
-
-
-
-  
  
 ## Contact
 
