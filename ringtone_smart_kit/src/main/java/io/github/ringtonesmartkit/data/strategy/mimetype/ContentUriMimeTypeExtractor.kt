@@ -20,12 +20,16 @@ package io.github.ringtonesmartkit.data.strategy.mimetype
 import android.content.Context
 import androidx.core.net.toUri
 import io.github.ringtonesmartkit.domain.strategy.mimetype.MimeTypeExtractor
+import io.github.ringtonesmartkit.domain.types.MimeExtractorTypes
 import javax.inject.Inject
 
-class ContentUriMimeTypeExtractor @Inject constructor(
-    private val context: Context
+internal class ContentUriMimeTypeExtractor @Inject constructor(
+    private val context: Context,
 ) : MimeTypeExtractor {
-    override fun getMimeType(uri: String): String {
+
+    override val typeExtractor: MimeExtractorTypes = MimeExtractorTypes.CONTENT_URI
+
+    override suspend fun getMimeType(uri: String): String {
         return context.contentResolver.getType(uri.toUri()) ?: "application/octet-stream"
     }
 }

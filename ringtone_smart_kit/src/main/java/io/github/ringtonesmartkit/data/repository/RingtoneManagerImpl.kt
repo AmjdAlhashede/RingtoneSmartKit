@@ -18,102 +18,48 @@
 package io.github.ringtonesmartkit.data.repository
 
 
-import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResult
-import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResultHandler
-import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.data.model.RingtoneContactParams
+import io.github.ringtonesmartkit.data.model.RingtoneSystemParams
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
-import io.github.ringtonesmartkit.domain.model.RingtoneTarget
-import io.github.ringtonesmartkit.domain.model.RingtoneType
 import io.github.ringtonesmartkit.domain.repository.RingtoneManager
-import io.github.ringtonesmartkit.domain.ringtoneresult.ContactRingtoneResult
-import io.github.ringtonesmartkit.domain.ringtoneresult.ContactRingtoneResultHandler
-import io.github.ringtonesmartkit.domain.ringtoneresult.SystemRingtoneResult
-import io.github.ringtonesmartkit.domain.ringtoneresult.SystemRingtoneResultHandler
-import io.github.ringtonesmartkit.domain.usecase.ApplyContactRingtoneUseCase
-import io.github.ringtonesmartkit.domain.usecase.ApplyRingtoneUseCase
-import io.github.ringtonesmartkit.domain.usecase.LoadRingtoneUseCase
-import io.github.ringtonesmartkit.mapper.toSystemTarget
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import io.github.ringtonesmartkit.domain.repository.RingtoneResultHandler
+import io.github.ringtonesmartkit.domain.strategy.applier.RingtoneTargetApplyHandler
+import io.github.ringtonesmartkit.domain.strategy.ringtoneloader.RingtoneLoaderHandler
+import io.github.ringtonesmartkit.domain.model.ContactTarget
+import io.github.ringtonesmartkit.domain.model.SystemTarget
 import javax.inject.Inject
 
-class RingtoneManagerImpl @Inject constructor(
-    private val loadRingtone: LoadRingtoneUseCase,
-    private val applyRingtone: ApplyRingtoneUseCase,
-    private val applyContactRingtoneUseCase: ApplyContactRingtoneUseCase,
+internal class RingtoneManagerImpl @Inject constructor(
+    private val ringtoneLoadHandler: RingtoneLoaderHandler,
+    private val systemHandler: RingtoneTargetApplyHandler<RingtoneSystemParams, Boolean>,
+    private val contactHandler: RingtoneTargetApplyHandler<RingtoneContactParams, ContactInfo?>,
 ) : RingtoneManager {
-
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
 
     override fun setSystemRingtone(
         source: RingtoneSource,
-        type: RingtoneType,
-    ): SystemRingtoneResultHandler {
-        return applyToTarget(source, type.toSystemTarget()) as SystemRingtoneResultHandler
+        target: SystemTarget,
+    ): RingtoneResultHandler<Unit> {
+        return RingtoneResultHandler {
+            val insertedUri = ringtoneLoadHandler.run(
+                source = source, ringtoneTarget = target
+            )
+            val param = RingtoneSystemParams(insertedUri = insertedUri.toString())
+            systemHandler.apply(param, target)
+        }
     }
-
 
     override fun setContactRingtone(
         source: RingtoneSource,
-        contact: ContactIdentifier,
-    ): ContactRingtoneResultHandler {
-        val target = RingtoneTarget.ContactTarget.Provided(contact)
-        return applyToTarget(source, target) as ContactRingtoneResultHandler
-    }
-
-    override fun applyToTarget(
-        source: RingtoneSource,
-        target: RingtoneTarget,
-    ): RingtoneApplyResultHandler {
-        val handler: RingtoneApplyResultHandler = when (target) {
-            is RingtoneTarget.System -> SystemRingtoneResultHandler()
-            is RingtoneTarget.ContactTarget -> ContactRingtoneResultHandler()
-        }
-
-        scope.launch {
-            runCatching {
-                loadAndApplyTarget(source, target)
-            }.onSuccess { result ->
-               handler.invokeSuccess(result)
-            }.onFailure { throwable ->
-                handler.invokeFailure(throwable)
-            }
-        }
-
-        return handler
-    }
-
-    @Throws(IllegalStateException::class)
-    override suspend fun loadAndApplyTarget(
-        source: RingtoneSource,
-        target: RingtoneTarget,
-    ): RingtoneApplyResult {
-        val ringtone = loadRingtone(source)
-            ?:return when (target) {
-                is RingtoneTarget.System -> throw IllegalStateException("Ringtone could not be loaded")
-                is RingtoneTarget.ContactTarget -> throw IllegalStateException("Ringtone could not be loaded")
-            }
-
-       return when (target) {
-            is RingtoneTarget.System -> {
-                applyRingtone(source = source, target = target, ringtone = ringtone)
-                SystemRingtoneResult.Success
-            }
-
-            is RingtoneTarget.ContactTarget -> {
-                val info = applyContactRingtoneUseCase(
-                    source = source,
-                    target = target,
-                    ringtone = ringtone
-                )
-
-                info?.let(ContactRingtoneResult::Success) ?: ContactRingtoneResult.Failure(
-                    IllegalStateException("No contact info returned")
-                )
-            }
+        target: ContactTarget,
+    ): RingtoneResultHandler<ContactInfo> {
+        return RingtoneResultHandler {
+            val insertedUri = ringtoneLoadHandler.run(
+                source = source, ringtoneTarget = target
+            )
+            val param = RingtoneContactParams(insertedUri = insertedUri.toString(), target = target)
+            val result = contactHandler.apply(param, target)
+            result ?: error("there error in setContactRingtone")
         }
     }
 }

@@ -17,16 +17,37 @@
 
 package io.github.ringtonesmartkit.domain.model
 
-sealed class RingtoneTarget {
+import android.net.Uri
+import android.os.Environment
 
-    sealed class System : RingtoneTarget() {
-        object Call : System()
-        object Notification : System()
-        object Alarm : System()
+sealed interface RingtoneTarget {
+    fun getDirectoryName(): String = when (this) {
+        SystemTarget.Call -> Environment.DIRECTORY_RINGTONES
+        SystemTarget.Notification -> Environment.DIRECTORY_NOTIFICATIONS
+        SystemTarget.Alarm -> Environment.DIRECTORY_ALARMS
+        is ContactTarget -> Environment.DIRECTORY_RINGTONES
     }
 
-    sealed class ContactTarget : RingtoneTarget() {
-        data class Provided(val identifier: ContactIdentifier) : ContactTarget()
-    }
+    fun isForCall() = this == SystemTarget.Call
+    fun isForNotification() = this == SystemTarget.Notification
+    fun isForAlarm() = this == SystemTarget.Alarm
+}
 
+
+sealed class SystemTarget : RingtoneTarget {
+
+    object Call : SystemTarget()
+
+    object Notification : SystemTarget()
+
+    object Alarm : SystemTarget()
+
+}
+
+
+sealed class ContactTarget : RingtoneTarget {
+    data class ByUri(val contactUri: Uri) : ContactTarget()
+    data class ById(val id: Long) : ContactTarget()
+    data class ByPhone(val phone: String) : ContactTarget()
+    object Interactive : ContactTarget()
 }

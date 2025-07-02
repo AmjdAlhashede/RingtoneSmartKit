@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.amjdalhashede"
-version = "1.0.4"
+version = "1.0.5"
 
 
 android {
@@ -63,7 +63,7 @@ afterEvaluate {
 
                 groupId = "io.github.amjdalhashede"
                 artifactId = "ringtone-smart-kit"
-                version = "1.0.4"
+                version = "1.0.5"
 
                 pom {
                     name.set("Ringtone Smart Kit")
@@ -132,6 +132,6 @@ tasks.register<Zip>("generateRepoZip") {
 
     from(layout.buildDirectory.dir("repo"))
 
-    archiveFileName.set("ringtone_smart_kit-1.0.4.zip")
+    archiveFileName.set("ringtone_smart_kit-1.0.5.zip")
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }

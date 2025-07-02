@@ -17,19 +17,15 @@
 
 package io.github.ringtonesmartkit.api
 
-import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.domain.model.ContactInfo
+import io.github.ringtonesmartkit.domain.model.ContactTarget
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
-import io.github.ringtonesmartkit.domain.model.RingtoneType
-import io.github.ringtonesmartkit.domain.ringtoneresult.ContactRingtoneResultHandler
-import io.github.ringtonesmartkit.domain.ringtoneresult.SystemRingtoneResultHandler
+import io.github.ringtonesmartkit.domain.model.SystemTarget
+import io.github.ringtonesmartkit.domain.repository.RingtoneResultHandler
+
 import io.github.ringtonesmartkit.provider.RingtoneSmartKitInitProvider
 
 
-/**
- * Helper object that provides a simplified API for setting system and contact ringtones.
- *
- * Internally delegates to [RingtoneHelper] through dependency injection.
- */
 object RingtoneHelper {
 
     private val ringtoneManager = RingtoneSmartKitInitProvider.component.provideRingtoneManager()
@@ -38,28 +34,29 @@ object RingtoneHelper {
      * Sets the system ringtone (calls, notifications, alarms).
      *
      * @param source Ringtone source (asset, storage, etc.).
-     * @param type Ringtone type: CALL, NOTIFICATION, ALARM.
+     * @param target SystemTarget : CALL, NOTIFICATION, ALARM.
      * @return SystemRingtoneResultHandler with async callbacks.
      */
+    @JvmStatic
     fun setSystemRingtone(
         source: RingtoneSource,
-        type: RingtoneType = RingtoneType.CALL
-    ): SystemRingtoneResultHandler {
-        return ringtoneManager.setSystemRingtone(source, type)
+        target: SystemTarget,
+    ): RingtoneResultHandler<Unit> {
+        return ringtoneManager.setSystemRingtone(source, target)
     }
 
     /**
      * Sets a ringtone for a specific contact.
      *
      * @param source Ringtone source.
-     * @param contact Contact identifier (ById, ByPhone, Interactive, etc.).
+     * @param target ContactTarget identifier (ById, ByPhone, Interactive, etc.).
      * @return ContactRingtoneResultHandler with async callbacks.
      */
+    @JvmStatic
     fun setContactRingtone(
         source: RingtoneSource,
-        contact: ContactIdentifier
-    ): ContactRingtoneResultHandler {
-        return ringtoneManager.setContactRingtone(source, contact)
+        target: ContactTarget,
+    ): RingtoneResultHandler<ContactInfo> {
+        return ringtoneManager.setContactRingtone(source, target)
     }
 }
-

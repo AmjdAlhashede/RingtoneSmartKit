@@ -19,10 +19,14 @@ package io.github.ringtonesmartkit.data.strategy.mimetype
 
 import android.webkit.MimeTypeMap
 import io.github.ringtonesmartkit.domain.strategy.mimetype.MimeTypeExtractor
+import io.github.ringtonesmartkit.domain.types.MimeExtractorTypes
 import javax.inject.Inject
 
-class FileUriMimeTypeExtractor @Inject constructor() : MimeTypeExtractor {
-    override fun getMimeType(uri: String): String {
+internal class FileUriMimeTypeExtractor @Inject constructor() : MimeTypeExtractor {
+
+    override val typeExtractor: MimeExtractorTypes = MimeExtractorTypes.FILE_URI
+
+    override suspend fun getMimeType(uri: String): String {
         return MimeTypeMap.getFileExtensionFromUrl(uri)
             ?.let { MimeTypeMap.getSingleton().getMimeTypeFromExtension(it) }
             ?: "application/octet-stream"

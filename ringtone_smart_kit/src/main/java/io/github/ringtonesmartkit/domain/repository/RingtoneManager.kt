@@ -17,34 +17,19 @@
 
 package io.github.ringtonesmartkit.domain.repository
 
-import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResult
-import io.github.ringtonesmartkit.domain.applier.RingtoneApplyResultHandler
-import io.github.ringtonesmartkit.domain.model.ContactIdentifier
+import io.github.ringtonesmartkit.domain.model.ContactInfo
 import io.github.ringtonesmartkit.domain.model.RingtoneSource
-import io.github.ringtonesmartkit.domain.model.RingtoneTarget
-import io.github.ringtonesmartkit.domain.model.RingtoneType
-import io.github.ringtonesmartkit.domain.ringtoneresult.ContactRingtoneResultHandler
-import io.github.ringtonesmartkit.domain.ringtoneresult.SystemRingtoneResultHandler
+import io.github.ringtonesmartkit.domain.model.ContactTarget
+import io.github.ringtonesmartkit.domain.model.SystemTarget
 
-
-interface RingtoneManager {
+internal interface RingtoneManager {
     fun setSystemRingtone(
         source: RingtoneSource,
-        type: RingtoneType = RingtoneType.CALL,
-    ): SystemRingtoneResultHandler
+        target: SystemTarget,
+    ): RingtoneResultHandler<Unit>
 
     fun setContactRingtone(
         source: RingtoneSource,
-        contact: ContactIdentifier,
-    ): ContactRingtoneResultHandler
-
-    fun applyToTarget(
-        source:  RingtoneSource,
-        target: RingtoneTarget,
-    ): RingtoneApplyResultHandler
-
-    suspend fun loadAndApplyTarget(
-        source: RingtoneSource,
-        target: RingtoneTarget,
-    ): RingtoneApplyResult
+        target: ContactTarget,
+    ): RingtoneResultHandler<ContactInfo>
 }

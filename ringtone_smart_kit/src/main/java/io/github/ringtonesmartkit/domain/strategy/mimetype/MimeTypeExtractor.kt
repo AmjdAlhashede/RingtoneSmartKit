@@ -17,6 +17,9 @@
 
 package io.github.ringtonesmartkit.domain.strategy.mimetype
 
+import io.github.ringtonesmartkit.domain.types.MimeExtractorTypes
+
 interface MimeTypeExtractor {
-    fun getMimeType(uri: String): String
+    val typeExtractor: MimeExtractorTypes
+    suspend fun getMimeType(uri: String): String
 }

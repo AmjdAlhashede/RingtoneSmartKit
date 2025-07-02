@@ -23,19 +23,21 @@ import dagger.Component
 import io.github.ringtonesmartkit.domain.repository.RingtoneManager
 import javax.inject.Singleton
 
+
 @Singleton
 @Component(
     modules = [
+        RingtoneInputStreamModule::class,
+        MimeTypeExtractorAbstract::class,
+        RingtoneLoaderModule::class,
+        FindRingtoneModule::class,
         RingtoneModule::class,
-        RingtoneSourcesModule::class,
-        InputStreamModule::class,
-        RingtoneInserterModule::class,
-        MimeTypeModule::class
+        ApplyTargetModule::class
     ]
 )
-interface RingtoneSmartKitComponent {
+internal interface RingtoneSmartKitComponent {
 
-    fun provideRingtoneManager(): RingtoneManager
+    fun provideRingtoneManager():  RingtoneManager
 
     @Component.Builder
     interface Builder {

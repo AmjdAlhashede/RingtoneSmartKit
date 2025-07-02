@@ -20,10 +20,11 @@ package io.github.ringtonesmartkit.domain.model
 import android.net.Uri
 
 
-sealed class RingtoneSource {
+sealed class RingtoneSource{
 
-    data class FromAssets(val filePath: String,val outputDirPath: String="") : RingtoneSource()
 
+    data class FromAssets(val filePath: String) : RingtoneSource()
+ 
     data class FromStorage(val uri: Uri) : RingtoneSource()
 
 //    data class FromUrl(val url: String) : RingtoneSource()

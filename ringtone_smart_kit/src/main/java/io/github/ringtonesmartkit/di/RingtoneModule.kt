@@ -19,37 +19,15 @@ package io.github.ringtonesmartkit.di
 
 import dagger.Binds
 import dagger.Module
-import io.github.ringtonesmartkit.data.applier.RingtoneAssetsApplierImpl
-import io.github.ringtonesmartkit.data.applier.RingtoneStorageApplierImpl
 import io.github.ringtonesmartkit.data.repository.RingtoneManagerImpl
-import io.github.ringtonesmartkit.data.repository.RingtoneRepositoryImpl
-import io.github.ringtonesmartkit.domain.applier.RingtoneAssetsApplier
-import io.github.ringtonesmartkit.domain.applier.RingtoneStorageApplier
 import io.github.ringtonesmartkit.domain.repository.RingtoneManager
-import io.github.ringtonesmartkit.domain.repository.RingtoneRepository
 
 @Module
-abstract class RingtoneModule {
-
-    @Binds
-    abstract fun provideRingtoneRepository(
-        ringtoneRepositoryImpl: RingtoneRepositoryImpl,
-    ): RingtoneRepository
+internal abstract class RingtoneModule {
 
     @Binds
     abstract fun provideRingtoneManager(
         ringtoneManagerImpl: RingtoneManagerImpl,
     ): RingtoneManager
-
-    @Binds
-    abstract fun provideRingtoneAssetsApplier(
-        ringtoneAssetsApplierImpl: RingtoneAssetsApplierImpl,
-    ): RingtoneAssetsApplier
-
-    @Binds
-    abstract fun provideRingtoneStorageApplier(
-        ringtoneStorageApplierImpl: RingtoneStorageApplierImpl,
-    ): RingtoneStorageApplier
-
 
 }

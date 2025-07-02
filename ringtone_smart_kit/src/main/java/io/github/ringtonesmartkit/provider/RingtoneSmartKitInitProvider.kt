@@ -24,11 +24,11 @@ import android.database.Cursor
 import android.net.Uri
 import io.github.ringtonesmartkit.di.DaggerRingtoneSmartKitComponent
 import io.github.ringtonesmartkit.di.RingtoneSmartKitComponent
-import io.github.ringtonesmartkit.domain.contact.ActivityTracker
+import io.github.ringtonesmartkit.presentation.lifecycle.ActivityTracker
 
-class RingtoneSmartKitInitProvider : ContentProvider() {
+internal class RingtoneSmartKitInitProvider : ContentProvider() {
 
-    internal companion object {
+    companion object {
         lateinit var component: RingtoneSmartKitComponent
             private set
     }
@@ -48,17 +48,10 @@ class RingtoneSmartKitInitProvider : ContentProvider() {
         p0: Uri,
         p1: String?,
         p2: Array<out String?>?,
-    ): Int {
-        return -1
-    }
+    ): Int = -1
 
-    override fun getType(p0: Uri): String? {
-        return null
-    }
-
-    override fun insert(p0: Uri, p1: ContentValues?): Uri? {
-        return null
-    }
+    override fun getType(p0: Uri): String? = null
+    override fun insert(p0: Uri, p1: ContentValues?): Uri? = null
 
     override fun query(
         p0: Uri,
@@ -66,16 +59,12 @@ class RingtoneSmartKitInitProvider : ContentProvider() {
         p2: String?,
         p3: Array<out String?>?,
         p4: String?,
-    ): Cursor? {
-        return null
-    }
+    ): Cursor? = null
 
     override fun update(
         p0: Uri,
         p1: ContentValues?,
         p2: String?,
         p3: Array<out String?>?,
-    ): Int {
-        return -1
-    }
+    ): Int = -1
 }
