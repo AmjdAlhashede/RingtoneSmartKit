@@ -3,7 +3,7 @@
 
 ![API Level](https://img.shields.io/badge/API_Level-22%2B-blue.svg?style=flat-square)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.amjdalhashede/ringtone-smart-kit)](https://search.maven.org/artifact/io.github.amjdalhashede/ringtone-smart-kit)
-
+[![License](https://img.shields.io/github/license/karacca/beetle)](https://www.apache.org/licenses/LICENSE-2.0)
 
 
 Easily set and customize ringtones, notification sounds, and alarms programmatically on Android using Kotlin.  
