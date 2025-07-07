@@ -18,7 +18,7 @@
 package io.github.ringtonesmartkit.data.strategy.mimetype.handler
 
 import io.github.ringtonesmartkit.data.strategy.mimetype.factory.MimeTypeExtractorFactory
-import io.github.ringtonesmartkit.domain.mapper.toMimeTypeExtractorType
+import io.github.ringtonesmartkit.domain.mapper.toRingtoneInputType
 import io.github.ringtonesmartkit.domain.strategy.mimetype.MimeTypeExtractorHandler
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ internal class MimeTypeExtractorHandlerImpl @Inject constructor(
 ) : MimeTypeExtractorHandler {
 
     override suspend fun getMimeType(uri: String): String {
-        val type = uri.toMimeTypeExtractorType()
+        val type = uri.toRingtoneInputType()
         val mimeTypeExtractor = mimeTypeExtractorFactory.getMimeTypeExtractor(type)
             ?: error("Unknown type")
         return mimeTypeExtractor.getMimeType(uri)

@@ -18,18 +18,18 @@
 package io.github.ringtonesmartkit.domain.mapper
 
 import android.content.ContentResolver
-import io.github.ringtonesmartkit.domain.model.RingtoneMetadata
+import android.net.Uri
 import io.github.ringtonesmartkit.domain.types.RingtoneInputType
 import io.github.ringtonesmartkit.utils.extensions.isThisAssetsUri
 
-internal fun RingtoneMetadata.toRingtoneInputType(): RingtoneInputType {
-    return if (contentUri.toString().isThisAssetsUri()) {
-        RingtoneInputType.ASSET_URI
-    } else {
-        when (this.contentUri.scheme) {
-            ContentResolver.SCHEME_CONTENT -> RingtoneInputType.CONTENT_URI
-            ContentResolver.SCHEME_FILE -> RingtoneInputType.FILE_URI
-            else -> throw IllegalArgumentException("This is Unknown Uri Scheme")
-        }
+internal fun String.toRingtoneInputType(): RingtoneInputType {
+    val lower = this.lowercase()
+    return when {
+        lower.startsWith("${ContentResolver.SCHEME_CONTENT}://") -> RingtoneInputType.CONTENT_URI
+        lower.isThisAssetsUri() -> RingtoneInputType.ASSET_URI
+        lower.startsWith("${ContentResolver.SCHEME_FILE}://") or lower.startsWith("/") -> RingtoneInputType.FILE_URI
+        else -> throw IllegalArgumentException("Unknown Uri Scheme for RingtoneInputType:\n$this")
     }
 }
+
+internal fun Uri.toRingtoneInputType(): RingtoneInputType = this.toString().toRingtoneInputType()

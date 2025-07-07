@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.amjdalhashede"
-version = "1.0.5"
+version =  "1.0.6"
 
 
 android {
@@ -63,11 +63,11 @@ afterEvaluate {
 
                 groupId = "io.github.amjdalhashede"
                 artifactId = "ringtone-smart-kit"
-                version = "1.0.5"
+                version = "1.0.6"
 
                 pom {
                     name.set("Ringtone Smart Kit")
-                    description.set("Android library to set ringtones from various sources.")
+                    description.set("A lightweight Android library for setting ringtones, notifications, and alarms from assets, files, and content URIs, including support for customizing ringtones for specific contacts — all without requiring Context or Activity.")
                     url.set("https://github.com/AmjdAlhashede/RingtoneSmartKit")
 
                     licenses {
@@ -132,6 +132,6 @@ tasks.register<Zip>("generateRepoZip") {
 
     from(layout.buildDirectory.dir("repo"))
 
-    archiveFileName.set("ringtone_smart_kit-1.0.5.zip")
+    archiveFileName.set("ringtone_smart_kit-1.0.6.zip")
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
 }

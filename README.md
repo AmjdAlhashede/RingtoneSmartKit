@@ -29,45 +29,30 @@ Add the following dependency to your `build.gradle` or `build.gradle.kts` file:
 ### Gradle Groovy (build.gradle)
 
 ```groovy
-implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.5"
+implementation "io.github.amjdalhashede:ringtone-smart-kit:1.0.6"
 ```
 
 ### Gradle Kotlin DSL (build.gradle.kts)
 
 ```kotlin
-implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.5")
+implementation("io.github.amjdalhashede:ringtone-smart-kit:1.0.6")
 ```
 
-## Required Permissions
 
-| Feature                    | Required Permissions                                                                                      | Notes                                                                                   |
-|----------------------------|----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| **Set System Ringtone**    | - `android.permission.WRITE_SETTINGS`<br>- `android.permission.READ_EXTERNAL_STORAGE` (API ≤ 32)<br>- `android.permission.WRITE_EXTERNAL_STORAGE` (API ≤ 32) | Required to change system ringtone and access local files (on older Android versions). |
-| **Set Contact Ringtone**   | - `android.permission.READ_CONTACTS`<br>- `android.permission.WRITE_CONTACTS`<br>- `android.permission.READ_EXTERNAL_STORAGE` (API ≤ 32)<br>- `android.permission.WRITE_EXTERNAL_STORAGE` (API ≤ 32) | Required to update contact ringtones and access files from storage.                    |
-| **Interactive Contact Picker** | - `android.permission.READ_CONTACTS`<br>- `android.permission.WRITE_CONTACTS`                          | Required for selecting and modifying contact info interactively.                        |
-
----
-
-### Add these permissions in your AndroidManifest.xml (copy one line at a time):
+### Add these permissions in your AndroidManifest.xml:
 
 ```xml
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-``` 
+<!-- 📁 Storage access (Only for Android 9 and below) -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
 
-```xml
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:ignore="ScopedStorage" />
-```
-
-```xml
+<!-- ⚙️ System settings modification (for setting system ringtones) -->
 <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-```
 
-```xml
- <uses-permission android:name="android.permission.READ_CONTACTS" /> 
-```
- 
-```xml
- <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+<!-- 👤 Contact ringtone customization -->
+<uses-permission android:name="android.permission.READ_CONTACTS" />
+<uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
 ```
 
 ## 🎯 Usage

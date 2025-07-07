@@ -28,7 +28,7 @@ internal class RingtoneInputStreamProviderHandlerImpl @Inject constructor(
     private val inputStreamProviderFactory: InputStreamProviderFactory,
 ) : RingtoneInputStreamProviderHandler {
     override fun openInputStream(ringtoneMetadata: RingtoneMetadata): InputStream {
-        val ringtoneInputType = ringtoneMetadata.toRingtoneInputType()
+        val ringtoneInputType = ringtoneMetadata.contentUri.toRingtoneInputType()
         val provider = inputStreamProviderFactory.getProvider(ringtoneInputType)
         return provider.openInputStream(
             ringtoneMetaData = ringtoneMetadata

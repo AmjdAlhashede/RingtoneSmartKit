@@ -25,55 +25,41 @@ import java.io.InputStream
 
 
 internal const val ASSETS_PATH_SEPARATOR = "/"
-internal const val ASSET_PATH_SCHEMA = "android_assets"
-internal const val ASSETS_URI_SCHEMA = "file:///android_assets"
+internal const val ASSET_PATH_SCHEMA = "android_asset"
+internal const val ASSETS_URI_SCHEMA = "file:///android_asset"
 internal const val ASSETS_SCHEMA = "assets"
 
-internal fun getAssetsPathSaverToDealWithClassLoader(path: String): String {
-    return when {
-        path.startsWith(ASSETS_URI_SCHEMA) -> path.replace(ASSETS_URI_SCHEMA, ASSETS_SCHEMA)
-        path.startsWith(ASSET_PATH_SCHEMA) -> path.replace(ASSET_PATH_SCHEMA, ASSETS_SCHEMA)
-        path.startsWith(ASSETS_SCHEMA) -> path
-        else -> "$ASSETS_SCHEMA$ASSETS_PATH_SEPARATOR$path"
-    }
-}
-
-internal fun extractPathFromAssetUri(uri: String): String {
-    val cleaned = when {
-        uri.startsWith(ASSETS_URI_SCHEMA) -> uri.removePrefix(ASSETS_URI_SCHEMA)
-        uri.startsWith(ASSET_PATH_SCHEMA) -> uri.removePrefix(ASSET_PATH_SCHEMA)
-        uri.startsWith(ASSETS_SCHEMA + ASSETS_PATH_SEPARATOR) ->
-            uri.removePrefix(ASSETS_SCHEMA + ASSETS_PATH_SEPARATOR)
-
-        else -> uri
-    }
-    return cleaned.removePrefix(ASSETS_PATH_SEPARATOR)
-}
 
 internal fun Context.extractInputStreamFromAssets(path: String): InputStream? {
-//    return classLoader.getResourceAsStream(getAssetsPathSaverToDealWithClassLoader(path))
     return runCatching {
         assets.open(extractPathFromAssetUri(path))
     }.getOrNull()
 }
 
-internal fun String.toAssetUri(): Uri {
-    return "file:///android_assets/$this".toUri()
-}
+
 
 internal fun String.isThisAssetsUri(): Boolean {
-    return when {
-        this.startsWith(ASSETS_URI_SCHEMA) or this.startsWith(ASSETS_SCHEMA) -> {
-            true
-        }
+    return listOf(
+        "$ASSETS_URI_SCHEMA$ASSETS_PATH_SEPARATOR",  // file:///android_asset/
+        "$ASSET_PATH_SCHEMA$ASSETS_PATH_SEPARATOR",  // android_asset/
+        "$ASSETS_SCHEMA$ASSETS_PATH_SEPARATOR"       // assets/
+    ).any { prefix -> this.startsWith(prefix) }
+}
 
-        else -> {
-            return runCatching {
-                ActivityTracker.currentActivity?.assets?.open(this)
-                true
-            }.getOrElse {
-                false
-            }
-        }
-    }
+
+internal fun extractPathFromAssetUri(uri: String): String {
+    return uri
+        .removePrefix("$ASSETS_URI_SCHEMA$ASSETS_PATH_SEPARATOR")
+        .removePrefix("$ASSET_PATH_SCHEMA$ASSETS_PATH_SEPARATOR")
+        .removePrefix("$ASSETS_SCHEMA$ASSETS_PATH_SEPARATOR")
+        .removePrefix(ASSETS_PATH_SEPARATOR)
+}
+
+internal fun String.toNormalizedAssetPath(): String {
+    val raw = extractPathFromAssetUri(this)
+    return "$ASSETS_URI_SCHEMA$ASSETS_PATH_SEPARATOR$raw"
+}
+
+internal fun Uri.toNormalizedAssetPath(): Uri {
+    return toString().toNormalizedAssetPath().toUri()
 }

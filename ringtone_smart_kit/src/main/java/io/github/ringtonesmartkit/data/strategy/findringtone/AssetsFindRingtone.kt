@@ -26,6 +26,7 @@ import io.github.ringtonesmartkit.domain.model.RingtoneSource
 import io.github.ringtonesmartkit.domain.strategy.findringotne.FindRingtone
 import io.github.ringtonesmartkit.utils.extensions.ExternalAudioUri
 import io.github.ringtonesmartkit.utils.extensions.nameOfPath
+import io.github.ringtonesmartkit.utils.extensions.toNormalizedAssetPath
 import javax.inject.Inject
 
 internal class AssetsFindRingtone @Inject constructor(
@@ -64,6 +65,6 @@ internal class AssetsFindRingtone @Inject constructor(
             }
         }
 
-        return RingtoneMetadata(contentUri = assetSource.filePath.toUri(), title = filename)
+        return RingtoneMetadata(contentUri = assetSource.filePath.toNormalizedAssetPath().toUri(), title = filename)
     }
 }

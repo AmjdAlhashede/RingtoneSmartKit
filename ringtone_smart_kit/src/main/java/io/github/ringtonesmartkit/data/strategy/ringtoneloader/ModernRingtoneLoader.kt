@@ -31,7 +31,6 @@ import io.github.ringtonesmartkit.domain.model.RingtoneTarget
 import io.github.ringtonesmartkit.utils.extensions.ExternalAudioUri
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.Q)
 internal class ModernRingtoneLoader @Inject constructor(
     private val context: Context,
     private val ringtoneInputStreamHandler: RingtoneInputStreamProviderHandler,

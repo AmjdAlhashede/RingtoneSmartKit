@@ -18,14 +18,14 @@
 package io.github.ringtonesmartkit.data.strategy.mimetype.factory
 
 import io.github.ringtonesmartkit.domain.strategy.mimetype.MimeTypeExtractor
-import io.github.ringtonesmartkit.domain.types.MimeExtractorTypes
+import io.github.ringtonesmartkit.domain.types.RingtoneInputType
 import javax.inject.Inject
 
 internal class MimeTypeExtractorFactory @Inject constructor(
     private val mimeTypeExtractorsProviders: Set<@JvmSuppressWildcards MimeTypeExtractor>,
 ) {
 
-    fun getMimeTypeExtractor(type: MimeExtractorTypes): MimeTypeExtractor? {
+    fun getMimeTypeExtractor(type: RingtoneInputType): MimeTypeExtractor? {
         return mimeTypeExtractorsProviders.firstOrNull { it.typeExtractor == type }
     }
 }

@@ -19,12 +19,12 @@ package io.github.ringtonesmartkit.data.strategy.mimetype
 
 import android.webkit.MimeTypeMap
 import io.github.ringtonesmartkit.domain.strategy.mimetype.MimeTypeExtractor
-import io.github.ringtonesmartkit.domain.types.MimeExtractorTypes
+import io.github.ringtonesmartkit.domain.types.RingtoneInputType
 import javax.inject.Inject
 
 internal class FileUriMimeTypeExtractor @Inject constructor() : MimeTypeExtractor {
 
-    override val typeExtractor: MimeExtractorTypes = MimeExtractorTypes.FILE_URI
+    override val typeExtractor: RingtoneInputType = RingtoneInputType.FILE_URI
 
     override suspend fun getMimeType(uri: String): String {
         return MimeTypeMap.getFileExtensionFromUrl(uri)
