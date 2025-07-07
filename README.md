@@ -130,7 +130,7 @@ RingtoneSource.FromStorage(uri = "content://media/internal/audio/media/10".toUri
 > ```kotlin
 > RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3")
 > RingtoneSource.FromAssets(filePath = "assets/ringtones/my_ringtone.mp3")
-> RingtoneSource.FromAssets(filePath = "file:///android_assets/ringtones/my_ringtone.mp3")
+> RingtoneSource.FromAssets(filePath = "file:///android_asset/ringtones/my_ringtone.mp3")
 > ```
 >
 > Internally, `RingtoneHelper` will normalize these paths, so feel free to use whichever style you prefer. ✅ Recommendation: Use `ringtones/my_ringtone.mp3` for a concise path.
