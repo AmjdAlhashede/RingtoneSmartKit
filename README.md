@@ -15,7 +15,7 @@ Perfect for Android developers who need a simple, flexible ringtone manager and 
 
 - Simplified API for setting system and contact ringtones without needing to pass Context or
   Activity.
-- Supports multiple ringtone sources, including assets, local storage (URI), and remote URLs.
+- Supports multiple ringtone sources, including assets and  local storage (URI).
 - Easy assignment of ringtones to specific contacts via different contact identifiers (ID, URI,
   phone number).
 - Asynchronous operations with success and error callbacks for better control.
