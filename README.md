@@ -106,7 +106,7 @@ You can load ringtones from different types of sources:
 RingtoneSource.FromAssets(filePath = "ringtones/my_ringtone.mp3")   
 
 // From device storage:
-RingtoneSource.FromStorage(uri = "content://media/internal/audio/media/10".toUri()))
+RingtoneSource.FromStorage(uri = "content://media/internal/audio/media/10".toUri())
  
 ```
 
